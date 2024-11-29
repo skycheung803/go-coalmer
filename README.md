@@ -1,5 +1,4 @@
 # coalmer
-> Inspired by [flyscrape](https://github.com/philippta/flyscrape)
 
 __Coalmer__ a crawler scrape data from japan mercari
 
@@ -8,9 +7,8 @@ ingeniously refers to the "coal miners" who extract items from the Mercari platf
 akin to the concept of "miners" extracting coal from a coal furnace.
 
 # Browser mode dependency 
-[go-rod](https://github.com/go-rod/rod)github.com/imroc/req/v3
-
+[go-rod](https://github.com/go-rod/rod)
 
 
 # credits  
-__Coalmer__ would not have been possible without some of [these amazing projects](./go.mod): [req](github.com/imroc/req/v3), [go-rod](https://github.com/go-rod/rod), [cobra](https://github.com/spf13/cobra)
+__Coalmer__ would not have been possible without some of [these amazing projects](./go.mod): [req](github.com/imroc/req/v3), [go-rod](https://github.com/go-rod/rod), [go-colly](github.com/go-colly/colly)
