@@ -12,8 +12,6 @@ var (
 
 func init() {
 	log.Println("start init ~~~ ")
-	//Coalmer = coalmer.NewCoalmer("api", false)
-	//Coalmer = coalmer.NewCoalmer("web", false)
 	//Coalmer = coalmer.NewCoalmer()
 	Coalmer = coalmer.NewCoalmer(coalmer.WithBrowserMode())
 	log.Println("init  finish~~~ ")
@@ -42,7 +40,6 @@ func detail() {
 		panic(err)
 	}
 	coalmer.Dump(res) */
-
 	//log.Println("---------------------Finish-----------------------------")
 }
 
@@ -56,10 +53,10 @@ func seller() {
 
 func search() {
 	p := coalmer.SearchData{
-		Keyword:           "iPhone 15",
-		ConditionId:       []int{1},
-		Page:              5,
-		SearchConditionId: "1cx0zHGljZB0xHGsdaVBob25lIDE1",
+		Keyword:     "iPhone 15",
+		ConditionId: []int{1},
+		//Page:              5,
+		//SearchConditionId: "1cx0zHGljZB0xHGsdaVBob25lIDE1",
 	}
 	res, err := Coalmer.Fetcher.Search(p)
 	if err != nil {
