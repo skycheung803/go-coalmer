@@ -12,8 +12,8 @@ var (
 
 func init() {
 	log.Println("start init ~~~ ")
-	//Coalmer = coalmer.NewCoalmer()
-	Coalmer = coalmer.NewCoalmer(coalmer.WithBrowserMode())
+	Coalmer = coalmer.NewCoalmer()
+	//Coalmer = coalmer.NewCoalmer(coalmer.WithBrowserMode())
 	log.Println("init  finish~~~ ")
 }
 

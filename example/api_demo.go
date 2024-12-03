@@ -1,6 +1,6 @@
-/*
 package main
 
+/*
 import (
 	"fmt"
 
@@ -12,7 +12,7 @@ var (
 )
 
 func init() {
-	apier = coalmer.NewAPIFetcher()
+	apier = coalmer.NewAPIFetcher(false)
 }
 
 func main() {
@@ -21,6 +21,7 @@ func main() {
 	//search()
 	//seller()
 	//similarLooks()
+	profile()
 }
 
 func detail() {
@@ -78,6 +79,14 @@ func similarLooks() {
 		//"mscq8am7HoHsqAisb8Qxga",
 	}
 	res, err := apier.SimilarLooks(s)
+	if err != nil {
+		panic(err)
+	}
+	coalmer.Dump(res)
+}
+
+func profile() {
+	res, err := apier.Profile("182093486")
 	if err != nil {
 		panic(err)
 	}

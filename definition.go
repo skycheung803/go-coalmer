@@ -322,15 +322,17 @@ type SellerProfileResponse struct {
 
 // seller product item response body
 type SellerProductsResponse struct {
-	Result  string                 `json:"result"`
-	Meta    map[string]interface{} `json:"meta"`
-	Data    []SellerItem           `json:"data"`
-	Profile ProfileData            `json:"profile"`
+	Result string `json:"result"`
+	Meta   struct {
+		HasNext bool   `json:"has_next"`
+		PagerId string `json:"pager_id"`
+	} `json:"meta"`
+	Data    []SellerItem `json:"data"`
+	Profile ProfileData  `json:"profile"`
 }
 
 type SimilarData struct {
-	ItemID string
-	//Type      string
+	ItemID    string
 	PageToken string
 	Limit     int
 }

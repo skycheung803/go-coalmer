@@ -83,10 +83,9 @@ func ShopProductsResult(payload []byte) (result SellerProductsResponse, err erro
 
 	products := info.Get("data").Get("products")
 	pageInfo := products.Get("pageInfo")
-	meta := map[string]interface{}{
-		"has_next": pageInfo.Get("hasNextPage").MustBool(),
-		"pager_id": pageInfo.Get("endCursor").MustString(),
-	}
+
+	result.Meta.HasNext = pageInfo.Get("hasNextPage").MustBool()
+	result.Meta.PagerId = pageInfo.Get("endCursor").MustString()
 
 	items := []SellerItem{}
 	for _, item := range products.Get("edges").MustArray() {
@@ -126,7 +125,7 @@ func ShopProductsResult(payload []byte) (result SellerProductsResponse, err erro
 	}
 
 	result.Data = items
-	result.Meta = meta
+	//result.Meta = meta
 	result.Result = "OK"
 	return result, nil
 }
