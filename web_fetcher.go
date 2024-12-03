@@ -82,12 +82,13 @@ func webSearchParse(p SearchData) string {
 		reqVal.Add("price_max", strconv.Itoa(p.PriceMax))
 	}
 
+	//sort=price&order=asc
 	if p.Sort != "" && p.Order != "" {
 		reqVal.Add("sort", p.Sort)
 		reqVal.Add("order", p.Order)
 	} else {
-		reqVal.Add("sort", SearchOptionSortCreatedTime)
-		reqVal.Add("order", SearchOptionOrderDESC)
+		reqVal.Add("sort", "created_time") //default
+		reqVal.Add("order", "desc")
 	}
 
 	link := fmt.Sprintf("%s/search?%s", RootURL, reqVal.Encode())

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"github.com/imroc/req/v3"
 )
@@ -59,8 +60,8 @@ func apiSearchParse(p SearchData) (string, error) {
 	}
 
 	if p.Sort != "" && p.Order != "" {
-		sp.SearchCondition.Sort = p.Sort
-		sp.SearchCondition.Order = p.Order
+		sp.SearchCondition.Sort = strings.ToUpper("SORT_" + p.Sort)
+		sp.SearchCondition.Order = strings.ToUpper("ORDER_" + p.Order)
 	} else {
 		sp.SearchCondition.Sort = SearchOptionSortCreatedTime
 		sp.SearchCondition.Order = SearchOptionOrderDESC
@@ -97,7 +98,6 @@ func (a *APIFetcher) Search(params SearchData) (response SearchResponse, err err
 	if err != nil {
 		return
 	}
-
 	return
 }
 

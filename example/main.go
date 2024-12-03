@@ -12,8 +12,8 @@ var (
 
 func init() {
 	log.Println("start init ~~~ ")
-	Coalmer = coalmer.NewCoalmer()
-	//Coalmer = coalmer.NewCoalmer(coalmer.WithBrowserMode())
+	//Coalmer = coalmer.NewCoalmer()
+	Coalmer = coalmer.NewCoalmer(coalmer.WithBrowserMode())
 	log.Println("init  finish~~~ ")
 }
 
@@ -21,9 +21,9 @@ func main() {
 	log.Println("--------------------- start ---------------------")
 	search()
 	log.Println("--------------------- search Finish -----------------------------")
-	detail()
+	//detail()
 	log.Println("--------------------- detail Finish -----------------------------")
-	seller()
+	//seller()
 	log.Println("--------------------- seller Finish -----------------------------")
 }
 
@@ -55,6 +55,8 @@ func search() {
 	p := coalmer.SearchData{
 		Keyword:     "iPhone 15",
 		ConditionId: []int{1},
+		Sort:        "price",
+		Order:       "asc",
 		//Page:              5,
 		//SearchConditionId: "1cx0zHGljZB0xHGsdaVBob25lIDE1",
 	}

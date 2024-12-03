@@ -11,13 +11,13 @@ const (
 const DefaultLengthSearchSessionId = 32
 
 const (
+	SearchOptionSortScore       = "SORT_SCORE"
+	SearchOptionSortPrice       = "SORT_PRICE"
+	SearchOptionSortNumLikes    = "SORT_NUM_LIKES"
+	SearchOptionSortCreatedTime = "SORT_CREATED_TIME"
+
 	SearchOptionOrderDESC = "ORDER_DESC"
 	SearchOptionOrderASC  = "ORDER_ASC"
-)
-
-const (
-	SearchOptionSortScore       = "SORT_SCORE"
-	SearchOptionSortCreatedTime = "SORT_CREATED_TIME"
 )
 
 var (
