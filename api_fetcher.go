@@ -266,3 +266,24 @@ func (a *APIFetcher) SimilarLooks(s SimilarData) (response SimilarLooksResponse,
 
 	return response, nil
 }
+
+/**
+* Profile get user profile
+ */
+func (a *APIFetcher) Profile(user_id string) (response SellerProfileResponse, err error) {
+	reqVal := url.Values{}
+	reqVal.Add("user_id", user_id)
+	reqVal.Add("_user_format", "profile")
+	link := fmt.Sprintf("%s?%s", profileParams.URL, reqVal.Encode())
+
+	headers, err := generateHeader(link, profileParams.Method)
+	if err != nil {
+		return
+	}
+	_, err = a.Client.R().SetHeaders(headers).SetSuccessResult(&response).Get(link)
+	if err != nil {
+		return
+	}
+
+	return
+}

@@ -60,6 +60,14 @@ var relatedParams = struct {
 	Method: http.MethodGet,
 }
 
+var profileParams = struct {
+	URL    string
+	Method string
+}{
+	URL:    ApiURL + "users/get_profile",
+	Method: http.MethodGet,
+}
+
 // similarLooks items
 var similarLooksParams = struct {
 	URL    string
