@@ -98,6 +98,9 @@ func (a *APIFetcher) Search(params SearchData) (response SearchResponse, err err
 	if err != nil {
 		return
 	}
+	if len(response.Items) > 0 {
+		response.Result = "OK"
+	}
 	return
 }
 
