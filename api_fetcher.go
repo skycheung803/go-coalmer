@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strconv"
 
 	"github.com/imroc/req/v3"
 )
@@ -175,6 +176,12 @@ func (a *APIFetcher) SellerProducts(seller_id, pager_id string) (response Seller
 	if err != nil {
 		return
 	}
+
+	if response.Meta.HasNext {
+		l := len(response.Data)
+		response.Meta.PagerId = strconv.FormatInt(response.Data[l-1].PagerId, 10)
+	}
+
 	return
 }
 
