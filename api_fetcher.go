@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/imroc/req/v3"
 )
@@ -106,11 +107,34 @@ func (a *APIFetcher) Search(params SearchData) (response SearchResponse, err err
 
 // ProductDetail product detail
 func (a *APIFetcher) Detail(id string) (response ItemResultResponse, err error) {
-	if len(id) > 15 {
-		return a.ShopItem(id) //B2C
-	} else {
-		return a.Item(id) // C2C
+	related := RelatedResponse{}
+	var err2 error
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+	go func() {
+		if len(id) > 15 {
+			response, err = a.ShopItem(id) //B2C
+		} else {
+			response, err = a.Item(id) // C2C
+		}
+		wg.Done()
+	}()
+
+	go func() {
+		related, err2 = a.Related(id, "15")
+		wg.Done()
+	}()
+	wg.Wait()
+
+	if err != nil {
+		return
 	}
+	if err2 == nil {
+		response.Data.Related = related.Data.Items
+	}
+
+	return response, nil
 }
 
 // Item is C2C product detail
@@ -224,7 +248,6 @@ func (a *APIFetcher) Related(item_id, limit string) (response RelatedResponse, e
 	if err != nil {
 		return
 	}
-
 	return
 }
 
