@@ -2,6 +2,7 @@ package coalmer
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -16,6 +17,7 @@ func ProductDetailResult(payload []byte) (detail ItemResultResponse, err error) 
 	}
 	data := MercariDetail{}
 	data.ProductId = result.Get("name").MustString()
+	data.Url = fmt.Sprintf("%s%s", webShopsItemURL, data.ProductId)
 	data.ProductName = result.Get("displayName").MustString()
 	data.Price, _ = strconv.Atoi(result.Get("price").MustString())
 

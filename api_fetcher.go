@@ -148,12 +148,36 @@ func (a *APIFetcher) Item(id string) (response ItemResultResponse, err error) {
 		return
 	}
 
-	_, err = a.Client.R().SetHeaders(headers).SetSuccessResult(&response).Get(link)
+	var similarLooksResponse SimilarLooksResponse
+	var err2 error
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+	go func() {
+		_, err = a.Client.R().SetHeaders(headers).SetSuccessResult(&response).Get(link)
+		wg.Done()
+	}()
+
+	go func() {
+		s := SimilarData{
+			ItemID: id,
+		}
+		similarLooksResponse, err2 = a.SimilarLooks(s)
+		wg.Done()
+	}()
+	wg.Wait()
+
 	if err != nil {
 		return
 	}
+	response.Data.Url = fmt.Sprintf("%s/%s", webItemURL, id)
 	response.Data.Categories = response.Data.ParentCategories
 	response.Data.Categories = append(response.Data.Categories, response.Data.ItemCategoryNtiers)
+
+	if err2 == nil {
+		response.Data.SimilarLooks = similarLooksResponse.Items
+	}
+
 	return
 }
 
@@ -198,8 +222,22 @@ func (a *APIFetcher) SellerProducts(seller_id, pager_id string) (response Seller
 	if err != nil {
 		return
 	}
+	var sellerProfile SellerProfileResponse
+	var err2 error
+	var wg sync.WaitGroup
 
-	_, err = a.Client.R().SetHeaders(headers).SetSuccessResult(&response).Get(link)
+	wg.Add(2)
+	go func() {
+		_, err = a.Client.R().SetHeaders(headers).SetSuccessResult(&response).Get(link)
+		wg.Done()
+	}()
+
+	go func() {
+		sellerProfile, err2 = a.Profile(seller_id)
+		wg.Done()
+	}()
+	wg.Wait()
+
 	if err != nil {
 		return
 	}
@@ -207,6 +245,10 @@ func (a *APIFetcher) SellerProducts(seller_id, pager_id string) (response Seller
 	if response.Meta.HasNext {
 		l := len(response.Data)
 		response.Meta.PagerId = strconv.FormatInt(response.Data[l-1].PagerId, 10)
+	}
+
+	if err2 == nil {
+		response.Profile = sellerProfile.Data
 	}
 
 	return
@@ -316,6 +358,10 @@ func (a *APIFetcher) Profile(user_id string) (response SellerProfileResponse, er
 	_, err = a.Client.R().SetHeaders(headers).SetSuccessResult(&response).Get(link)
 	if err != nil {
 		return
+	}
+
+	if response.Data.Code == "" {
+		response.Data.Code = strconv.Itoa(response.Data.ID)
 	}
 
 	return

@@ -223,6 +223,7 @@ type MercariDetail struct {
 	Updated            int64          `json:"updated"`
 	UpdatedStr         string         `json:"UpdatedStr"`
 	Related            []RelatedItem  `json:"related ,omitempty"`
+	SimilarLooks       []SimilarItem  `json:"similar_looks ,omitempty"`
 }
 
 type ItemSellerInfo struct {
