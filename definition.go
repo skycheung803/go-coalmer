@@ -158,10 +158,10 @@ type V2SearchRequestDetail struct {
 // entities:search response body
 type SearchResponse struct {
 	Result            string                 `json:"result"` // OK or error
-	Errors            []xerror               `json:"errors ,omitempty"`
+	Errors            []xerror               `json:"errors,omitempty"`
 	Items             []Item                 `json:"items"`
-	Components        []any                  `json:"components ,omitempty"`
-	SearchConditionId string                 `json:"searchConditionId ,omitempty"`
+	Components        []any                  `json:"components,omitempty"`
+	SearchConditionId string                 `json:"searchConditionId,omitempty"`
 	Meta              map[string]interface{} `json:"meta"`
 }
 
@@ -173,10 +173,10 @@ type Item struct {
 	Thumbnails    []string `json:"thumbnails"`
 	ItemType      string   `json:"itemType"` // ITEM_TYPE_MERCARI ITEM_TYPE_BEYOND
 	Condition     string   `json:"itemConditionId"`
-	ShippingPayer string   `json:"shippingPayerId ,omitempty"` // 0(or 2): by seller
+	ShippingPayer string   `json:"shippingPayerId,omitempty"` // 0(or 2): by seller
 	Status        string   `json:"status"`
-	Seller        string   `json:"sellerId ,omitempty"`
-	Buyer         string   `json:"buyerId ,omitempty"`
+	Seller        string   `json:"sellerId,omitempty"`
+	Buyer         string   `json:"buyerId,omitempty"`
 	Created       string   `json:"created"`
 	Updated       string   `json:"updated"`
 }
@@ -189,9 +189,9 @@ type Name_Id_Unit struct {
 // Item() response body
 type ItemResultResponse struct {
 	Result string                 `json:"result"`
-	Errors []xerror               `json:"errors ,omitempty"`
+	Errors []xerror               `json:"errors,omitempty"`
 	Data   MercariDetail          `json:"data"`
-	Meta   map[string]interface{} `json:"meta ,omitempty"`
+	Meta   map[string]interface{} `json:"meta,omitempty"`
 }
 
 // Item() response body item part
@@ -216,14 +216,14 @@ type MercariDetail struct {
 	ItemSize           Name_Id_Unit   `json:"item_size"`
 	Colors             []Name_Id_Unit `json:"colors"`
 	ItemCategory       Name_Id_Unit   `json:"item_category"`
-	ItemCategoryNtiers Name_Id_Unit   `json:"item_category_ntiers ,omitempty"`
-	ParentCategories   []Name_Id_Unit `json:"parent_categories_ntiers ,omitempty"`
+	ItemCategoryNtiers Name_Id_Unit   `json:"item_category_ntiers,omitempty"`
+	ParentCategories   []Name_Id_Unit `json:"parent_categories_ntiers,omitempty"`
 	Categories         []Name_Id_Unit `json:"categories"`
 	Created            int64          `json:"created"`
 	Updated            int64          `json:"updated"`
 	UpdatedStr         string         `json:"UpdatedStr"`
-	Related            []RelatedItem  `json:"related ,omitempty"`
-	SimilarLooks       []SimilarItem  `json:"similar_looks ,omitempty"`
+	Related            []RelatedItem  `json:"related,omitempty"`
+	SimilarLooks       []SimilarItem  `json:"similar_looks,omitempty"`
 }
 
 type ItemSellerInfo struct {
