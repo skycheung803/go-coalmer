@@ -63,11 +63,12 @@ func webSearchParse(p SearchData) string {
 	}
 
 	if len(p.ConditionId) > 0 {
-		strSlice := make([]string, len(p.ConditionId))
+		/* strSlice := make([]string, len(p.ConditionId))
 		for i, v := range p.ConditionId {
 			strSlice[i] = strconv.Itoa(v)
 		}
-		item_condition_id := strings.Join(strSlice, ",")
+		item_condition_id := strings.Join(strSlice, ",") */
+		item_condition_id := IntSliceToString(p.ConditionId)
 		reqVal.Add("item_condition_id", item_condition_id)
 	}
 

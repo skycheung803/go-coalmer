@@ -31,7 +31,12 @@ func apiSearchParse(p SearchData) (string, error) {
 	sp := V2Search{}
 	sp.DefaultDatabases = []string{"DATASET_TYPE_MERCARI", "DATASET_TYPE_BEYOND"}
 	sp.IndexRouting = "INDEX_ROUTING_UNSPECIFIED"
-	sp.PageSize = p.Limit
+	if p.Limit > 0 {
+		sp.PageSize = p.Limit
+	} else {
+		sp.PageSize = DefaultPageSize
+	}
+
 	if p.Page > 0 {
 		sp.PageToken = fmt.Sprintf("v1:%d", p.Page)
 	}

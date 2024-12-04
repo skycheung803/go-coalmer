@@ -95,3 +95,12 @@ func parsePriceInt(priceStr string) (price int) {
 	price, _ = strconv.Atoi(priceStr)
 	return price
 }
+
+// int slice to string
+func IntSliceToString(intSlice []int) string {
+	strSlice := make([]string, len(intSlice))
+	for i, v := range intSlice {
+		strSlice[i] = strconv.Itoa(v)
+	}
+	return strings.Join(strSlice, ",")
+}

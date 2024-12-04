@@ -8,7 +8,10 @@ const (
 	ShopURL = "https://mercari-shops.com/"
 )
 
-const DefaultLengthSearchSessionId = 32
+const (
+	DefaultLengthSearchSessionId = 32
+	DefaultPageSize              = 60
+)
 
 const (
 	SearchOptionSortScore       = "SORT_SCORE"
@@ -99,18 +102,18 @@ type xerror struct {
 }
 
 type SearchData struct {
-	Keyword           string
-	BrandId           []int
-	CategoryId        []int
-	ColorId           []int
-	ConditionId       []int
-	PriceMax          int
-	PriceMin          int
-	Order             string
-	Sort              string
-	Page              int
-	Limit             int
-	SearchConditionId string
+	Keyword           string `json:"keyword"`
+	BrandId           []int  `json:"brand_id"`
+	CategoryId        []int  `json:"category_id"`
+	ColorId           []int  `json:"color_id"`
+	ConditionId       []int  `json:"item_condition_id"`
+	PriceMax          int    `json:"price_max"`
+	PriceMin          int    `json:"price_min"`
+	Order             string `json:"order"`
+	Sort              string `json:"sort"`
+	Page              int    `json:"page"`
+	Limit             int    `json:"limit"`
+	SearchConditionId string `json:"search_condition_id"`
 }
 
 // entities:search request body
