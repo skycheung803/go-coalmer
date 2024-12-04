@@ -342,7 +342,7 @@ func (w *WebFetcher) Item(id string) (response ItemResultResponse, err error) {
 		})
 	}
 
-	response.Data.Colors = []int{} //@todo
+	response.Data.Colors = []Name_Id_Unit{} //@todo
 	response.Meta = map[string]interface{}{}
 
 	return response, nil
@@ -469,7 +469,7 @@ func (w *WebFetcher) ShopItem(id string) (response ItemResultResponse, err error
 		})
 	}
 
-	response.Data.Colors = []int{} //@todo
+	response.Data.Colors = []Name_Id_Unit{} //@todo
 	response.Meta = map[string]interface{}{}
 
 	return

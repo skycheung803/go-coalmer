@@ -191,7 +191,7 @@ type ItemResultResponse struct {
 	Result string                 `json:"result"`
 	Errors []xerror               `json:"errors ,omitempty"`
 	Data   MercariDetail          `json:"data"`
-	Meta   map[string]interface{} `json:"meta"`
+	Meta   map[string]interface{} `json:"meta ,omitempty"`
 }
 
 // Item() response body item part
@@ -214,7 +214,7 @@ type MercariDetail struct {
 	ShippingMethod     Name_Id_Unit   `json:"shipping_method"`
 	ShippingPayer      Name_Id_Unit   `json:"shipping_payer"`
 	ItemSize           Name_Id_Unit   `json:"item_size"`
-	Colors             []int          `json:"colors"`
+	Colors             []Name_Id_Unit `json:"colors"`
 	ItemCategory       Name_Id_Unit   `json:"item_category"`
 	ItemCategoryNtiers Name_Id_Unit   `json:"item_category_ntiers ,omitempty"`
 	ParentCategories   []Name_Id_Unit `json:"parent_categories_ntiers ,omitempty"`

@@ -1,6 +1,5 @@
 package main
 
-/*
 import (
 	"fmt"
 
@@ -16,12 +15,12 @@ func init() {
 }
 
 func main() {
-	//detail()
+	detail()
 	//related()
 	//search()
 	//seller()
 	//similarLooks()
-	profile()
+	//profile()
 }
 
 func detail() {
@@ -86,10 +85,10 @@ func similarLooks() {
 }
 
 func profile() {
-	res, err := apier.Profile("182093486")
+	//res, err := apier.Profile("182093486")
+	res, err := apier.Profile("TcPxqCaTaFgNtgHpcLzhCG")
 	if err != nil {
 		panic(err)
 	}
 	coalmer.Dump(res)
 }
-*/

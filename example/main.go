@@ -12,30 +12,30 @@ var (
 
 func init() {
 	log.Println("start init ~~~ ")
-	//Coalmer = coalmer.NewCoalmer()
-	Coalmer = coalmer.NewCoalmer(coalmer.WithBrowserMode())
+	Coalmer = coalmer.NewCoalmer()
+	//Coalmer = coalmer.NewCoalmer(coalmer.WithBrowserMode())
 	log.Println("init  finish~~~ ")
 }
 
 func main() {
 	log.Println("--------------------- start ---------------------")
-	search()
+	//search()
 	log.Println("--------------------- search Finish -----------------------------")
-	//detail()
+	detail()
 	log.Println("--------------------- detail Finish -----------------------------")
 	//seller()
 	log.Println("--------------------- seller Finish -----------------------------")
 }
 
 func detail() {
-	res, err := Coalmer.Fetcher.Detail("f5s7W74buc5RAViYnqPggD")
+	res, err := Coalmer.Fetcher.Detail("m71951482074") // m97792326581 7HnYy2wC4begbaif4BXTf5
 	if err != nil {
 		panic(err)
 	}
 	coalmer.Dump(res)
 	//fmt.Println("--------------------------------------------------")
 
-	/* res, err = Coalmer.Fetcher.Detail("m86235728638")
+	/* res, err = Coalmer.Fetcher.Detail("7HnYy2wC4begbaif4BXTf5")
 	if err != nil {
 		panic(err)
 	}
@@ -44,7 +44,7 @@ func detail() {
 }
 
 func seller() {
-	res, err := Coalmer.Fetcher.Seller("GqU4Yahsuz6LW3NZZR53T8", "")
+	res, err := Coalmer.Fetcher.Seller("755873977", "") // 755873977   GqU4Yahsuz6LW3NZZR53T8
 	if err != nil {
 		panic(err)
 	}
