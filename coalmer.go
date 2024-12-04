@@ -9,7 +9,7 @@ type DataFetcher interface {
 	Detail(itemId string) (ItemResultResponse, error)
 
 	// Seller retrieves a list of products from a specific seller.
-	Seller(sellerId string, page string) (SellerProductsResponse, error)
+	Seller(sellerId string, pager_id string) (SellerProductsResponse, error)
 }
 
 type mode string
