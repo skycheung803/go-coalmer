@@ -66,7 +66,7 @@ func apiSearchParse(p SearchData) (string, error) {
 	}
 
 	if len(p.ColorId) > 0 {
-		sp.SearchCondition.ItemConditionId = p.ColorId
+		sp.SearchCondition.ColorId = p.ColorId
 	}
 
 	if p.Sort != "" && p.Order != "" {

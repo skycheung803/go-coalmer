@@ -69,7 +69,7 @@ func webSearchParse(p SearchData) string {
 
 	if len(p.ColorId) > 0 {
 		color_id := IntSliceToString(p.ColorId)
-		reqVal.Add("item_condition_id", color_id)
+		reqVal.Add("color_id", color_id)
 	}
 
 	if p.PriceMin > p.PriceMax {
