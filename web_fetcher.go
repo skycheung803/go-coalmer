@@ -63,13 +63,13 @@ func webSearchParse(p SearchData) string {
 	}
 
 	if len(p.ConditionId) > 0 {
-		/* strSlice := make([]string, len(p.ConditionId))
-		for i, v := range p.ConditionId {
-			strSlice[i] = strconv.Itoa(v)
-		}
-		item_condition_id := strings.Join(strSlice, ",") */
 		item_condition_id := IntSliceToString(p.ConditionId)
 		reqVal.Add("item_condition_id", item_condition_id)
+	}
+
+	if len(p.ColorId) > 0 {
+		color_id := IntSliceToString(p.ColorId)
+		reqVal.Add("item_condition_id", color_id)
 	}
 
 	if p.PriceMin > p.PriceMax {

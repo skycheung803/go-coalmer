@@ -65,6 +65,10 @@ func apiSearchParse(p SearchData) (string, error) {
 		sp.SearchCondition.ItemConditionId = p.ConditionId
 	}
 
+	if len(p.ColorId) > 0 {
+		sp.SearchCondition.ItemConditionId = p.ColorId
+	}
+
 	if p.Sort != "" && p.Order != "" {
 		sp.SearchCondition.Sort = strings.ToUpper("SORT_" + p.Sort)
 		sp.SearchCondition.Order = strings.ToUpper("ORDER_" + p.Order)
