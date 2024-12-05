@@ -43,7 +43,7 @@ func apiSearchParse(p SearchData) (string, error) {
 
 	// searchCondition
 	sp.SearchCondition.HasCoupon = false
-	sp.SearchCondition.Status = []string{"STATUS_ON_SALE"}
+	//sp.SearchCondition.Status = []string{"STATUS_ON_SALE"} //"STATUS_ON_SALE", "STATUS_TRADING", "STATUS_SOLD_OUT"
 	sp.SearchCondition.Keyword = p.Keyword
 
 	if p.PriceMin > p.PriceMax {
@@ -75,6 +75,26 @@ func apiSearchParse(p SearchData) (string, error) {
 	} else {
 		sp.SearchCondition.Sort = SearchOptionSortCreatedTime
 		sp.SearchCondition.Order = SearchOptionOrderDESC
+	}
+
+	if len(p.Status) > 0 {
+		if ok := Contains(p.Status, "on_sale"); ok {
+			sp.SearchCondition.Status = append(sp.SearchCondition.Status, "STATUS_ON_SALE")
+		}
+
+		if ok := Contains(p.Status, "sold_out"); ok {
+			sp.SearchCondition.Status = append(sp.SearchCondition.Status, "STATUS_SOLD_OUT", "STATUS_TRADING")
+		}
+	}
+
+	if len(p.ItemTypes) > 0 {
+		if ok := Contains(p.ItemTypes, "mercari"); ok {
+			sp.SearchCondition.ItemTypes = append(sp.SearchCondition.ItemTypes, "ITEM_TYPE_MERCARI")
+		}
+
+		if ok := Contains(p.ItemTypes, "beyond"); ok {
+			sp.SearchCondition.ItemTypes = append(sp.SearchCondition.ItemTypes, "ITEM_TYPE_BEYOND")
+		}
 	}
 
 	sp.SearchSessionId = generateSearchSessionId(DefaultLengthSearchSessionId)

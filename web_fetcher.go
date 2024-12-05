@@ -35,6 +35,8 @@ func NewWebFetcher(headless bool) *WebFetcher {
 	}
 }
 
+// WebSearchParse parse search condition to url
+// https://jp.mercari.com/search?brand_id=7572&price_min=10000&price_max=50000&category_id=76&item_condition_id=1&status=on_sale,sold_out&item_types=beyond,mercari&color_id=10&page_token=v1:3
 func webSearchParse(p SearchData) string {
 	reqVal := url.Values{}
 	if p.Page > 0 {
@@ -90,6 +92,16 @@ func webSearchParse(p SearchData) string {
 	} else {
 		reqVal.Add("sort", "created_time") //default
 		reqVal.Add("order", "desc")
+	}
+
+	if len(p.Status) > 0 {
+		status := strings.Join(p.Status, ",") // on_sale  trading  sold_out
+		reqVal.Add("status", status)
+	}
+
+	if len(p.ItemTypes) > 0 {
+		status := strings.Join(p.Status, ",") // mercari  beyond
+		reqVal.Add("item_types", status)
 	}
 
 	link := fmt.Sprintf("%s/search?%s", RootURL, reqVal.Encode())

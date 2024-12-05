@@ -102,18 +102,20 @@ type xerror struct {
 }
 
 type SearchData struct {
-	Keyword           string `json:"keyword"`
-	BrandId           []int  `json:"brand_id"`
-	CategoryId        []int  `json:"category_id"`
-	ColorId           []int  `json:"color_id"`
-	ConditionId       []int  `json:"item_condition_id"`
-	PriceMax          int    `json:"price_max"`
-	PriceMin          int    `json:"price_min"`
-	Order             string `json:"order"`
-	Sort              string `json:"sort"`
-	Page              int    `json:"page"`
-	Limit             int    `json:"limit"`
-	SearchConditionId string `json:"search_condition_id"`
+	Keyword           string   `json:"keyword"`
+	BrandId           []int    `json:"brand_id"`
+	CategoryId        []int    `json:"category_id"`
+	ColorId           []int    `json:"color_id"`
+	ConditionId       []int    `json:"item_condition_id"`
+	PriceMax          int      `json:"price_max"`
+	PriceMin          int      `json:"price_min"`
+	Order             string   `json:"order"`
+	Sort              string   `json:"sort"`
+	Status            []string `json:"status"`
+	ItemTypes         []string `json:"item_types"`
+	Page              int      `json:"page"`
+	Limit             int      `json:"limit"`
+	SearchConditionId string   `json:"search_condition_id"`
 }
 
 // entities:search request body
@@ -142,7 +144,7 @@ type V2SearchRequestDetail struct {
 	ColorId          []int    `json:"colorId"`         // default empty
 	HasCoupon        bool     `json:"hasCoupon"`       // default false
 	ItemConditionId  []int    `json:"itemConditionId"` // default empty
-	ItemTypes        []any    `json:"itemTypes"`       // default empty
+	ItemTypes        []string `json:"itemTypes"`       // default empty  ITEM_TYPE_MERCARI  ITEM_TYPE_BEYOND   mercari beyond
 	Keyword          string   `json:"keyword"`
 	ExcludeKeyword   string   `json:"excludeKeyword"`   // TODO: check if this can achieve what it means
 	PriceMax         int      `json:"priceMax"`         // default empty
@@ -155,7 +157,7 @@ type V2SearchRequestDetail struct {
 	SKUIds           []any    `json:"skuIds"`           // default empty
 	Order            string   `json:"order"`
 	Sort             string   `json:"sort"`
-	Status           []string `json:"status"` // default empty
+	Status           []string `json:"status"` // default empty   STATUS_ON_SALE  STATUS_TRADING  STATUS_SOLD_OUT   on_sale trading sold_out
 }
 
 // entities:search response body
