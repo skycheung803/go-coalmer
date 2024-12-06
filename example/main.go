@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/skycheung803/go-coalmer"
@@ -19,9 +21,9 @@ func init() {
 
 func main() {
 	log.Println("--------------------- start ---------------------")
-	//search()
+	search()
 	log.Println("--------------------- search Finish -----------------------------")
-	detail()
+	//detail()
 	log.Println("--------------------- detail Finish -----------------------------")
 	//seller()
 	log.Println("--------------------- seller Finish -----------------------------")
@@ -52,20 +54,28 @@ func seller() {
 }
 
 func search() {
-	p := coalmer.SearchData{
-		Keyword:     "iPhone 15",
-		ConditionId: []int{1},
-		Sort:        "price",
-		Order:       "asc",
-		//Page:              5,
-		//SearchConditionId: "1cx0zHGljZB0xHGsdaVBob25lIDE1",
-	}
-	res, err := Coalmer.Fetcher.Search(p)
+	/*
+		p := coalmer.SearchData{
+			Keyword:     "iPhone 15",
+			ConditionId: []int{1},
+			Sort:        "price",
+			Order:       "asc",
+			//Page:              5,
+			//SearchConditionId: "1cx0zHGljZB0xHGsdaVBob25lIDE1",
+		}
+	*/
+	p := coalmer.SearchData{}
+	//params := `{"keyword":"agd","category_id":[14],"price_min":5000,"price_max":8000,"sort":"","item_condition_id":[],"page":0}`
+	params := `{"keyword":"","category_id":[4],"sort":"","item_condition_id":[],"item_types":["beyond"],"price_min":0,"price_max":0,"page":0,"brand_id":[],"color_id":[],"status":[]}`
+	json.Unmarshal([]byte(params), &p)
+	fmt.Printf("%+v\n", p)
+	//coalmer.Dump(p)
+	_, err := Coalmer.Fetcher.Search(p)
 	if err != nil {
 		panic(err)
 	}
 
 	//fmt.Println(len(res.Items))
-	coalmer.Dump(res)
+	//coalmer.Dump(res)
 
 }

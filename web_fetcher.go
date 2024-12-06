@@ -100,8 +100,8 @@ func webSearchParse(p SearchData) string {
 	}
 
 	if len(p.ItemTypes) > 0 {
-		status := strings.Join(p.Status, ",") // mercari  beyond
-		reqVal.Add("item_types", status)
+		types := strings.Join(p.ItemTypes, ",") // mercari  beyond
+		reqVal.Add("item_types", types)
 	}
 
 	link := fmt.Sprintf("%s/search?%s", RootURL, reqVal.Encode())
