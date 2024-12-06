@@ -15,10 +15,26 @@ import (
 )
 
 type WebFetcher struct {
-	Client *rod.Browser
+	headless bool
+	Client   *rod.Browser
 }
 
-func NewWebFetcher(headless bool) *WebFetcher {
+type WebFetcherOption func(*WebFetcher)
+
+func WithClient(browser *rod.Browser) WebFetcherOption {
+	return func(wf *WebFetcher) {
+		wf.Client = browser
+	}
+}
+
+func WithHeadless(headless bool) WebFetcherOption {
+	return func(wf *WebFetcher) {
+		wf.headless = headless
+	}
+}
+
+// LaunchBrowser quick launch browser with headless mode
+func LaunchBrowser(headless bool) *rod.Browser {
 	path, _ := launcher.LookPath()
 	serviceURL, err := launcher.New().Bin(path).Headless(headless).Launch()
 	if err != nil {
@@ -30,13 +46,29 @@ func NewWebFetcher(headless bool) *WebFetcher {
 		log.Fatal(err)
 	}
 
-	return &WebFetcher{
-		Client: browser,
+	return browser
+}
+
+// NewWebFetcher create new web fetcher
+func NewWebFetcher(options ...WebFetcherOption) *WebFetcher {
+	wf := &WebFetcher{
+		headless: true, // 设置默认值为 true
 	}
+
+	for _, option := range options {
+		option(wf)
+	}
+
+	if wf.Client == nil {
+		browser := LaunchBrowser(wf.headless)
+		wf.Client = browser
+	}
+
+	return wf
 }
 
 // WebSearchParse parse search condition to url
-// https://jp.mercari.com/search?brand_id=7572&price_min=10000&price_max=50000&category_id=76&item_condition_id=1&status=on_sale,sold_out&item_types=beyond,mercari&color_id=10&page_token=v1:3
+// https://jp.mercari.com/search?brand_id=7572&price_min=10000&price_max=50000&category_id=76&item_condition_id=1,2&status=on_sale,sold_out&item_types=beyond,mercari&color_id=10,12&page_token=v1:3
 func webSearchParse(p SearchData) string {
 	reqVal := url.Values{}
 	if p.Page > 0 {

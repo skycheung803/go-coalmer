@@ -1,5 +1,7 @@
 package coalmer
 
+import "github.com/go-rod/rod"
+
 // DataFetcher interface defines methods for retrieving data from a data source.
 type DataFetcher interface {
 	// Search searches for items based on the provided search data.
@@ -23,6 +25,30 @@ type Coalmer struct {
 	Mode    mode
 	Debug   bool
 	Fetcher DataFetcher
+	Browser *rod.Browser
+}
+
+type CoalmerOption func(*Coalmer)
+
+// WithBrowser
+func WithBrowser(browser *rod.Browser) CoalmerOption {
+	return func(c *Coalmer) {
+		c.Browser = browser
+	}
+}
+
+// WithBrowserMode
+func WithBrowserMode() CoalmerOption {
+	return func(c *Coalmer) {
+		c.Mode = ModeWeb
+	}
+}
+
+// WithDebug
+func WithDebug(debug bool) CoalmerOption {
+	return func(c *Coalmer) {
+		c.Debug = debug
+	}
 }
 
 /*
@@ -31,11 +57,10 @@ The mode can be either "web" or "api", and the debug flag determines whether to 
 default is "api" and debug is false.
 */
 
-func NewCoalmer(options ...func(*Coalmer)) *Coalmer {
+func NewCoalmer(options ...CoalmerOption) *Coalmer {
 	c := &Coalmer{
-		Mode:    ModeAPI,
-		Debug:   false,
-		Fetcher: nil,
+		Mode:  ModeAPI,
+		Debug: false,
 	}
 
 	for _, f := range options {
@@ -44,25 +69,12 @@ func NewCoalmer(options ...func(*Coalmer)) *Coalmer {
 
 	var fetcher DataFetcher
 	if c.Mode == ModeWeb {
-		fetcher = NewWebFetcher(!c.Debug) //debug no headless show browser
+		//fetcher = NewWebFetcher(!c.Debug) //debug no headless show browser
+		fetcher = NewWebFetcher(WithClient(c.Browser), WithHeadless(!c.Debug))
 	} else {
 		fetcher = NewAPIFetcher(c.Debug)
 	}
 
 	c.Fetcher = fetcher
 	return c
-}
-
-// WithBrowserMode
-func WithBrowserMode() func(*Coalmer) {
-	return func(c *Coalmer) {
-		c.Mode = ModeWeb
-	}
-}
-
-// WithDebug
-func WithDebug(debug bool) func(*Coalmer) {
-	return func(c *Coalmer) {
-		c.Debug = debug
-	}
 }
