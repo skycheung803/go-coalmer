@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/bitly/go-simplejson"
 	"github.com/go-rod/rod"
@@ -142,12 +143,14 @@ func webSearchParse(p SearchData) string {
 
 func (w *WebFetcher) getHtml(link string, wait_selector string) (html string) {
 	//log.Println(link)
+	//@link https://go-rod.github.io/#/context-and-timeout?id=timeout
 	page := stealth.MustPage(w.Client) //隐身模式
 	defer page.MustClose()
-	page.MustNavigate(link).MustWaitStable()
-	page.MustEval(`() => {window.scrollTo({top: document.body.scrollHeight,behavior: 'smooth'});}`)
+
+	page.Timeout(time.Second * 3).MustNavigate(link).MustWaitStable()
+	page.Timeout(time.Second * 1).MustEval(`() => {window.scrollTo({top: document.body.scrollHeight,behavior: 'smooth'});}`)
 	if wait_selector != "" {
-		page.MustElement(wait_selector).MustWaitStable()
+		page.Timeout(time.Second * 3).MustElement(wait_selector).MustWaitStable()
 	}
 	html = page.MustHTML()
 	return
@@ -155,7 +158,6 @@ func (w *WebFetcher) getHtml(link string, wait_selector string) (html string) {
 
 func (w *WebFetcher) Search(params SearchData) (response SearchResponse, err error) {
 	link := webSearchParse(params)
-
 	html := w.getHtml(link, "#item-grid")
 	htmlElement, err := ParseHtml(html)
 	if err != nil {
@@ -264,15 +266,6 @@ func (w *WebFetcher) Item(id string) (response ItemResultResponse, err error) {
 		response.Data.Status = "on_sale"
 	}
 
-	/* var rate float64
-	if res.Data.CurrentPrice.PriceStr != "" && res.Data.CurrentPrice.Currency != "" {
-		priceStr := strings.TrimSpace(strings.ReplaceAll(res.Data.CurrentPrice.PriceStr, ",", ""))
-		convertedPrice, e := strconv.ParseFloat(priceStr, 64)
-		if e == nil {
-			rate = float64(response.Data.Price) / convertedPrice
-		}
-	} */
-
 	for _, v := range res.Data.Info {
 		if strings.Contains(v.Title, "ブランド") {
 			response.Data.Brand.Id = int64(GetQueryParamInt(v.Url, "brand_id"))
@@ -350,21 +343,10 @@ func (w *WebFetcher) Item(id string) (response ItemResultResponse, err error) {
 	response.Data.UpdatedStr = res.Data.UpdatedStr
 
 	for _, v := range res.Data.Related {
-		/* originalPrice := 0
-		priceStr := strings.ReplaceAll(v.Price, ",", "")
-		convertedPrice, e := strconv.ParseFloat(priceStr, 64)
-		if rate > 0 && e == nil {
-			originalPrice = int(convertedPrice * rate)
-		} else {
-			originalPrice, _ = strconv.Atoi(priceStr)
-		} */
-
-		//log.Println(v.Name, v.Label, v.Price)
 		if strings.Contains(v.Label, "HK") {
 			labels := strings.Split(v.Label, " ")
 			l := len(labels)
 			if l >= 3 {
-				//v.Price = parsePrice(labels[1])
 				v.Price = labels[l-2]
 			}
 		}
