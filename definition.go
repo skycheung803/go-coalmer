@@ -227,7 +227,7 @@ type MercariDetail struct {
 	Created            int64          `json:"created"`
 	Updated            int64          `json:"updated"`
 	UpdatedStr         string         `json:"UpdatedStr"`
-	Related            []RelatedItem  `json:"related,omitempty"`
+	Related            []RelatedItem  `json:"related"`
 	SimilarLooks       []SimilarItem  `json:"similar_looks,omitempty"`
 }
 
