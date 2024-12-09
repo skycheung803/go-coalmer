@@ -69,7 +69,7 @@ func NewWebFetcher(options ...WebFetcherOption) *WebFetcher {
 }
 
 // WebSearchParse parse search condition to url
-// https://jp.mercari.com/search?brand_id=7572&price_min=10000&price_max=50000&category_id=76&item_condition_id=1,2&status=on_sale,sold_out&item_types=beyond,mercari&color_id=10,12&page_token=v1:3
+// @link  https://jp.mercari.com/search?brand_id=7572&price_min=10000&price_max=50000&category_id=76&item_condition_id=1,2&status=on_sale,sold_out&item_types=beyond,mercari&color_id=10,12&page_token=v1:3
 func webSearchParse(p SearchData) string {
 	reqVal := url.Values{}
 	if p.Page > 0 {
