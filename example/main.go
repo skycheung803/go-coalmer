@@ -14,8 +14,10 @@ var (
 
 func init() {
 	log.Println("start init ~~~ ")
+
 	Coalmer = coalmer.NewCoalmer()
-	//Coalmer = coalmer.NewCoalmer(coalmer.WithBrowserMode())
+	//browser := coalmer.LaunchBrowser(false)
+	//Coalmer = coalmer.NewCoalmer(coalmer.WithBrowserMode(), coalmer.WithBrowser(browser))
 	log.Println("init  finish~~~ ")
 }
 
@@ -23,25 +25,33 @@ func main() {
 	log.Println("--------------------- start ---------------------")
 	search()
 	log.Println("--------------------- search Finish -----------------------------")
-	//detail()
-	log.Println("--------------------- detail Finish -----------------------------")
-	//seller()
+	detail("m12958444254")
+	//detail("m58457143925")
+	log.Println("--------------------- detail 1 Finish -----------------------------")
+	detail("m97792326581")
+	log.Println("--------------------- detail 2 Finish -----------------------------")
+
+	seller()
 	log.Println("--------------------- seller Finish -----------------------------")
 }
 
-func detail() {
-	res, err := Coalmer.Fetcher.Detail("m71951482074") // m97792326581 7HnYy2wC4begbaif4BXTf5
+func detail(id string) {
+	//res, err := Coalmer.Fetcher.Detail("m97792326581") // m97792326581 7HnYy2wC4begbaif4BXTf5
+	res, err := Coalmer.Fetcher.Detail(id) // m97792326581 7HnYy2wC4begbaif4BXTf5
 	if err != nil {
 		panic(err)
 	}
-	coalmer.Dump(res)
-	//fmt.Println("--------------------------------------------------")
+	//coalmer.Dump(res)
+	fmt.Println(res.Data.ProductName)
+	//fmt.Println("-----------------------detail 1---------------------------")
 
-	/* res, err = Coalmer.Fetcher.Detail("7HnYy2wC4begbaif4BXTf5")
+	//res, err = Coalmer.Fetcher.Detail("7HnYy2wC4begbaif4BXTf5")
+	/* res, err = Coalmer.Fetcher.Detail("m12958444254")
 	if err != nil {
 		panic(err)
-	}
-	coalmer.Dump(res) */
+	} */
+	//coalmer.Dump(res)
+	//fmt.Println(res.Data.ProductName)
 	//log.Println("---------------------Finish-----------------------------")
 }
 
@@ -50,7 +60,8 @@ func seller() {
 	if err != nil {
 		panic(err)
 	}
-	coalmer.Dump(res)
+	//coalmer.Dump(res)
+	log.Println(res.Profile.Name)
 }
 
 func search() {
@@ -70,12 +81,12 @@ func search() {
 	json.Unmarshal([]byte(params), &p)
 	fmt.Printf("%+v\n", p)
 	//coalmer.Dump(p)
-	_, err := Coalmer.Fetcher.Search(p)
+	res, err := Coalmer.Fetcher.Search(p)
 	if err != nil {
 		panic(err)
 	}
 
-	//fmt.Println(len(res.Items))
+	log.Println(len(res.Items))
 	//coalmer.Dump(res)
 
 }
