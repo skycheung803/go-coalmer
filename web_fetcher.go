@@ -333,7 +333,7 @@ func (w *WebFetcher) Item(id string) (response ItemResultResponse, err error) {
 		}
 
 		if l > 2 {
-			Rating, _ := strconv.Atoi(strings.TrimSpace(strings.Replace(label[2], "段階評価中5", "", 1)))
+			Rating, _ := strconv.ParseFloat(strings.TrimSpace(strings.Replace(label[2], "段階評価中5", "", 1)), 64)
 			response.Data.Seller.Rating = Rating
 		}
 
@@ -484,7 +484,7 @@ func (w *WebFetcher) ShopItem(id string) (response ItemResultResponse, err error
 	}
 
 	response.Data.Seller.NumRatings, _ = strconv.Atoi(res.Data.SellerInfo.NumRatingsStr)
-	response.Data.Seller.Rating, _ = strconv.Atoi(res.Data.SellerInfo.StarRatingScoreStr)
+	response.Data.Seller.Rating, _ = strconv.ParseFloat(res.Data.SellerInfo.StarRatingScoreStr, 64)
 	response.Data.UpdatedStr = res.Data.UpdatedStr
 
 	for _, v := range res.Data.Related {

@@ -52,7 +52,7 @@ func ProductDetailResult(payload []byte) (detail ItemResultResponse, err error) 
 	data.Seller.Code = shop.Get("name").MustString()
 	data.Seller.Name = shop.Get("displayName").MustString()
 	data.Seller.Avatar = shop.Get("thumbnail").MustString()
-	data.Seller.Rating = shop.Get("shopStats").Get("score").MustInt()
+	data.Seller.Rating = shop.Get("shopStats").Get("score").MustFloat64()
 	data.Seller.Score, _ = strconv.Atoi(shop.Get("shopStats").Get("reviewCount").MustString())
 	data.Seller.NumSell = int32(len(shop.Get("shopItems").MustArray()))
 
