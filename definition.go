@@ -243,7 +243,7 @@ type ItemSellerInfo struct {
 	SmsAuthAt    string           `json:"register_sms_confirmation_at"`
 	Score        int              `json:"score"` // =good-bad
 	NumRatings   int              `json:"num_ratings"`
-	Rating       int              `json:"star_rating_score"`
+	Rating       float64          `json:"star_rating_score"`
 	Ratings      ItemSellerRating `json:"ratings"`
 }
 
