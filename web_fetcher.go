@@ -145,7 +145,7 @@ func (w *WebFetcher) getHtml(link string, wait_selector string) (html string) {
 	//log.Println(link)
 	//@link https://go-rod.github.io/#/context-and-timeout?id=timeout
 	page := stealth.MustPage(w.Client) //隐身模式
-	defer page.MustClose()
+	//defer page.MustClose()
 
 	page.Timeout(time.Second * 3).MustNavigate(link).MustWaitStable()
 	page.Timeout(time.Second * 1).MustEval(`() => {window.scrollTo({top: document.body.scrollHeight,behavior: 'smooth'});}`)
@@ -157,6 +157,55 @@ func (w *WebFetcher) getHtml(link string, wait_selector string) (html string) {
 }
 
 func (w *WebFetcher) Index(limit int) (response IndexProductsResponse, err error) {
+	html := w.getHtml(webIndexURL, "#item-grid")
+	htmlElement, err := ParseHtml(html)
+	if err != nil {
+		return
+	}
+
+	var res searchSelector
+	if err = htmlElement.Unmarshal(&res); err != nil {
+		return
+	}
+
+	items := make([]SellerItem, 0)
+	for _, item := range res.Items {
+		if item.ID == "" && item.Name == "" {
+			continue
+		}
+		status := "on_sale"
+		if strings.Contains(item.Status, "売り切れ") {
+			status = "sold_out"
+		}
+
+		if strings.Contains(item.Label, "HK") {
+			labels := strings.Split(item.Label, " ")
+			l := len(labels)
+			if l >= 3 {
+				item.Price = parsePrice(labels[l-2])
+			}
+		}
+
+		items = append(items, SellerItem{
+			RelatedItem: RelatedItem{
+				ID:         item.ID,
+				ItemType:   item.ItemType,
+				Name:       item.Name,
+				Thumbnails: []string{item.Image},
+				Price:      parsePriceInt(item.Price),
+				Status:     status,
+			},
+		})
+
+		limit--
+		if limit == 0 {
+			break
+		}
+	}
+
+	response.Result = "OK"
+	response.Data = items
+
 	return
 }
 
@@ -175,6 +224,9 @@ func (w *WebFetcher) Search(params SearchData) (response SearchResponse, err err
 
 	items := make([]Item, 0)
 	for _, item := range res.Items {
+		if item.ID == "" && item.Name == "" {
+			continue
+		}
 		status := "on_sale"
 		if strings.Contains(item.Status, "売り切れ") {
 			status = "sold_out"
