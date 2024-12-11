@@ -1,3 +1,4 @@
+/*
 package main
 
 import (
@@ -92,3 +93,4 @@ func profile() {
 	}
 	coalmer.Dump(res)
 }
+*/

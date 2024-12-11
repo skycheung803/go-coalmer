@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"runtime"
 
 	"github.com/skycheung803/go-coalmer"
 )
@@ -15,24 +16,37 @@ var (
 func init() {
 	log.Println("start init ~~~ ")
 
-	Coalmer = coalmer.NewCoalmer()
-	//browser := coalmer.LaunchBrowser(false)
-	//Coalmer = coalmer.NewCoalmer(coalmer.WithBrowserMode(), coalmer.WithBrowser(browser))
+	//Coalmer = coalmer.NewCoalmer()
+	browser := coalmer.LaunchBrowser(true)
+	Coalmer = coalmer.NewCoalmer(coalmer.WithBrowserMode(), coalmer.WithBrowser(browser))
 	log.Println("init  finish~~~ ")
 }
 
 func main() {
 	log.Println("--------------------- start ---------------------")
-	search()
+	index(20)
+	//detail("m58457143925")
+	log.Println("--------------------- index  Finish -----------------------------")
+	//search()
 	log.Println("--------------------- search Finish -----------------------------")
-	detail("m12958444254")
+	//detail("m12958444254")
 	//detail("m58457143925")
 	log.Println("--------------------- detail 1 Finish -----------------------------")
-	detail("m97792326581")
+	//detail("m97792326581")
 	log.Println("--------------------- detail 2 Finish -----------------------------")
-
-	seller()
+	//seller()
 	log.Println("--------------------- seller Finish -----------------------------")
+	runtime.Goexit()
+}
+
+func index(limit int) {
+
+	res, err := Coalmer.Fetcher.Index(limit)
+	if err != nil {
+		panic(err)
+	}
+	coalmer.Dump(res)
+	//fmt.Println(res.Data.ProductName)
 }
 
 func detail(id string) {
