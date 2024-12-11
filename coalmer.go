@@ -4,7 +4,11 @@ import "github.com/go-rod/rod"
 
 // DataFetcher interface defines methods for retrieving data from a data source.
 type DataFetcher interface {
-	// Search searches for items based on the provided search data.
+
+	// Index  for index page items based on the provided get_items data.
+	Index(limit int) (response IndexProductsResponse, err error)
+
+	// Search for items based on the provided search data.
 	Search(s SearchData) (SearchResponse, error)
 
 	// Detail retrieves detailed information about a specific item.

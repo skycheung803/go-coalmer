@@ -156,6 +156,10 @@ func (w *WebFetcher) getHtml(link string, wait_selector string) (html string) {
 	return
 }
 
+func (w *WebFetcher) Index(limit int) (response IndexProductsResponse, err error) {
+	return
+}
+
 func (w *WebFetcher) Search(params SearchData) (response SearchResponse, err error) {
 	link := webSearchParse(params)
 	html := w.getHtml(link, "#item-grid")

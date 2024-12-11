@@ -112,6 +112,28 @@ func apiSearchParse(p SearchData) (string, error) {
 	return string(res), nil
 }
 
+func (a *APIFetcher) Index(limit int) (response IndexProductsResponse, err error) {
+	reqVal := url.Values{}
+	reqVal.Add("limit", strconv.Itoa(limit))
+	reqVal.Add("type", "category")
+	link := fmt.Sprintf("%s?%s", indexParams.URL, reqVal.Encode())
+
+	headers, err := generateHeader(link, indexParams.Method)
+	if err != nil {
+		return
+	}
+	_, err = a.Client.R().SetHeaders(headers).SetSuccessResult(&response).Get(link)
+	if err != nil {
+		return
+	}
+
+	if response.Meta.HasNext {
+		l := len(response.Data)
+		response.Meta.PagerId = strconv.FormatInt(response.Data[l-1].PagerId, 10)
+	}
+	return response, nil
+}
+
 // Search product by any search param
 func (a *APIFetcher) Search(params SearchData) (response SearchResponse, err error) {
 	queryData, err := apiSearchParse(params)

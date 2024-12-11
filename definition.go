@@ -24,12 +24,21 @@ const (
 )
 
 var (
+	webIndexURL       = RootURL
 	webSearchURL      = RootURL + "search"
 	webItemURL        = RootURL + "item"
 	webShopsItemURL   = RootURL + "shops/product/"
 	webSellerURL      = RootURL + "user/profile/"
 	webShopsSellerURL = ShopURL + "shops/"
 )
+
+var indexParams = struct {
+	URL    string
+	Method string
+}{
+	URL:    ApiURL + "store/get_items",
+	Method: http.MethodGet,
+}
 
 var searchParams = struct {
 	URL    string
@@ -160,6 +169,16 @@ type V2SearchRequestDetail struct {
 	Status           []string `json:"status"` // default empty   STATUS_ON_SALE  STATUS_TRADING  STATUS_SOLD_OUT   on_sale trading sold_out
 }
 
+// get_items response body
+type IndexProductsResponse struct {
+	Result string `json:"result"`
+	Meta   struct {
+		HasNext bool   `json:"has_next"`
+		PagerId string `json:"pager_id"`
+	} `json:"meta"`
+	Data []SellerItem `json:"data"`
+}
+
 // entities:search response body
 type SearchResponse struct {
 	Result            string                 `json:"result"` // OK or error
@@ -260,7 +279,7 @@ type RelatedItem struct {
 	Status     string   `json:"status"`
 	Thumbnail  string   `json:"thumbnail"`
 	Thumbnails []string `json:"thumbnails"`
-	ItemType   string   `json:"item_type"`
+	ItemType   string   `json:"item_type,omitempty"`
 }
 
 // related item response body
