@@ -110,6 +110,11 @@ type xerror struct {
 	Message string `json:"message"`
 }
 
+type merror struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}
+
 type SearchData struct {
 	Keyword           string   `json:"keyword"`
 	BrandId           []int    `json:"brand_id"`

@@ -15,6 +15,7 @@ func ProductDetailResult(payload []byte) (detail ItemResultResponse, err error) 
 	if err != nil {
 		return
 	}
+
 	data := MercariDetail{}
 	data.ProductId = result.Get("name").MustString()
 	data.Url = fmt.Sprintf("%s%s", webShopsItemURL, data.ProductId)

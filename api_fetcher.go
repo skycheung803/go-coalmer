@@ -2,6 +2,7 @@ package coalmer
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/url"
 	"strconv"
@@ -146,13 +147,23 @@ func (a *APIFetcher) Search(params SearchData) (response SearchResponse, err err
 		return
 	}
 
-	_, err = a.Client.R().SetHeaders(headers).SetBody(queryData).SetSuccessResult(&response).Post(searchParams.URL)
+	var errMsg merror
+	resp, err := a.Client.R().SetHeaders(headers).SetBody(queryData).SetSuccessResult(&response).SetErrorResult(&errMsg).Post(searchParams.URL)
 	if err != nil {
 		return
 	}
-	if len(response.Items) > 0 {
-		response.Result = "OK"
+
+	fmt.Println(resp.StatusCode)
+	//fmt.Println(resp.String())
+	if resp.IsErrorState() {
+		response.Result = "error"
+		err = fmt.Errorf("mercari search api error: %s", errMsg.Message)
+		return
 	}
+
+	//if len(response.Items) > 0 {
+	response.Result = "OK"
+	//}
 	return
 }
 
@@ -201,11 +212,12 @@ func (a *APIFetcher) Item(id string) (response ItemResultResponse, err error) {
 
 	var similarLooksResponse SimilarLooksResponse
 	var err2 error
+	var errMsg merror
 	var wg sync.WaitGroup
 
 	wg.Add(2)
 	go func() {
-		_, err = a.Client.R().SetHeaders(headers).SetSuccessResult(&response).Get(link)
+		_, err = a.Client.R().SetHeaders(headers).SetSuccessResult(&response).SetErrorResult(&errMsg).Get(link)
 		wg.Done()
 	}()
 
@@ -221,6 +233,19 @@ func (a *APIFetcher) Item(id string) (response ItemResultResponse, err error) {
 	if err != nil {
 		return
 	}
+
+	if errMsg.Code != 0 {
+		response.Result = "error"
+		err = fmt.Errorf("mercari Item api error: %s", errMsg.Message)
+		return
+	}
+
+	if response.Data.ProductId == "" {
+		response.Result = "error"
+		err = errors.New("item not found")
+		return
+	}
+
 	response.Data.Url = fmt.Sprintf("%s/%s", webItemURL, id)
 	response.Data.Categories = response.Data.ParentCategories
 	response.Data.Categories = append(response.Data.Categories, response.Data.ItemCategoryNtiers)
@@ -243,10 +268,18 @@ func (a *APIFetcher) ShopItem(id string) (response ItemResultResponse, err error
 		return
 	}
 
-	resp, err := a.Client.R().SetHeaders(headers).Get(link)
+	var errMsg merror
+	resp, err := a.Client.R().SetHeaders(headers).SetErrorResult(&errMsg).Get(link)
 	if err != nil {
 		return
 	}
+
+	if errMsg.Code != 0 {
+		response.Result = "error"
+		err = fmt.Errorf("mercari ShopItem api error: %s", errMsg.Message)
+		return
+	}
+
 	return ProductDetailResult(resp.Bytes())
 }
 
@@ -275,11 +308,12 @@ func (a *APIFetcher) SellerProducts(seller_id, pager_id string) (response Seller
 	}
 	var sellerProfile SellerProfileResponse
 	var err2 error
+	var errMsg merror
 	var wg sync.WaitGroup
 
 	wg.Add(2)
 	go func() {
-		_, err = a.Client.R().SetHeaders(headers).SetSuccessResult(&response).Get(link)
+		_, err = a.Client.R().SetHeaders(headers).SetSuccessResult(&response).SetErrorResult(&errMsg).Get(link)
 		wg.Done()
 	}()
 
@@ -290,6 +324,12 @@ func (a *APIFetcher) SellerProducts(seller_id, pager_id string) (response Seller
 	wg.Wait()
 
 	if err != nil {
+		return
+	}
+
+	if errMsg.Code != 0 {
+		response.Result = "error"
+		err = fmt.Errorf("mercari SellerProducts api error: %s", errMsg.Message)
 		return
 	}
 
@@ -309,16 +349,26 @@ func (a *APIFetcher) SellerProducts(seller_id, pager_id string) (response Seller
 func (a *APIFetcher) ShopProducts(shop_id, pager_id string) (response SellerProductsResponse, err error) {
 	queryData, err := shopProductsGQL(shop_id, pager_id)
 	if err != nil {
+		response.Result = "error"
 		return
 	}
 
 	headers, err := generateHeader(shopProductParams.URL, sellerProductParams.Method)
 	if err != nil {
+		response.Result = "error"
 		return
 	}
 
-	resp, err := a.Client.R().SetHeaders(headers).SetBody(queryData).Post(shopProductParams.URL)
+	var errMsg merror
+	resp, err := a.Client.R().SetHeaders(headers).SetBody(queryData).SetErrorResult(&errMsg).Post(shopProductParams.URL)
 	if err != nil {
+		response.Result = "error"
+		return
+	}
+
+	if errMsg.Code != 0 {
+		response.Result = "error"
+		err = fmt.Errorf("mercari ShopProducts api error: %s", errMsg.Message)
 		return
 	}
 
