@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/bitly/go-simplejson"
@@ -43,9 +44,6 @@ func ProductDetailResult(payload []byte) (detail ItemResultResponse, err error) 
 	data.ShippingMethod.Id, _ = strconv.ParseInt(productDetail.Get("shippingMethod").Get("shippingMethodId").MustString(), 10, 64)
 	data.ShippingMethod.Name = productDetail.Get("shippingMethod").Get("displayName").MustString()
 
-	data.ShippingPayer.Id, _ = strconv.ParseInt(productDetail.Get("shippingPayer").Get("shippingPayerId").MustString(), 10, 64)
-	data.ShippingPayer.Name = productDetail.Get("shippingPayer").Get("displayName").MustString()
-
 	data.ShippingDuration.Id, _ = strconv.ParseInt(productDetail.Get("shippingDuration").Get("shippingDurationId").MustString(), 10, 64)
 	data.ShippingDuration.Name = productDetail.Get("shippingDuration").Get("displayName").MustString()
 
@@ -71,6 +69,26 @@ func ProductDetailResult(payload []byte) (detail ItemResultResponse, err error) 
 	}
 	data.Categories = categories
 	data.Photos = productDetail.Get("photos").MustStringArray()
+
+	data.ShippingPayer.Id, _ = strconv.ParseInt(productDetail.Get("shippingPayer").Get("shippingPayerId").MustString(), 10, 64)
+	data.ShippingPayer.Name = productDetail.Get("shippingPayer").Get("displayName").MustString()
+	data.ShippingPayer.Code = strings.ToLower(productDetail.Get("shippingPayer").Get("code").MustString())
+
+	shippingFeeConfig := productDetail.Get("shippingFeeConfig")
+	// 检查 shippingFeeConfig 是否为 nil
+	if shippingFeeConfig.Interface() != nil {
+		data.ShippingPayer.MinFee = shippingFeeConfig.Get("minFeePrice").MustInt()
+		data.ShippingPayer.MaxFee = shippingFeeConfig.Get("maxFeePrice").MustInt()
+		fees := shippingFeeConfig.Get("fees").MustArray()
+		for _, fee := range fees {
+			feeMap := fee.(map[string]interface{})
+			// 检查 displayName 是否为 "大阪"
+			if feeMap["displayName"] == "大阪" {
+				data.ShippingPayer.Fee = feeMap["price"].(int)
+				break
+			}
+		}
+	}
 
 	detail.Result = "OK"
 	detail.Data = data

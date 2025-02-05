@@ -215,6 +215,15 @@ type Name_Id_Unit struct {
 	Name string `json:"name"`
 }
 
+type ShippingPayer struct {
+	Id     int64  `json:"id"`
+	Name   string `json:"name"`
+	Code   string `json:"code"`
+	Fee    int    `json:"fee"`
+	MinFee int    `json:"min_fee"`
+	MaxFee int    `json:"max_fee"`
+}
+
 // Item() response body
 type ItemResultResponse struct {
 	Result string                 `json:"result"`
@@ -241,7 +250,7 @@ type MercariDetail struct {
 	ShippingDuration   Name_Id_Unit   `json:"shipping_duration"`
 	ShippingFrom       Name_Id_Unit   `json:"shipping_from_area"`
 	ShippingMethod     Name_Id_Unit   `json:"shipping_method"`
-	ShippingPayer      Name_Id_Unit   `json:"shipping_payer"`
+	ShippingPayer      ShippingPayer  `json:"shipping_payer"`
 	ItemSize           Name_Id_Unit   `json:"item_size"`
 	Colors             []Name_Id_Unit `json:"colors"`
 	ItemCategory       Name_Id_Unit   `json:"item_category"`
