@@ -82,7 +82,6 @@ func ProductDetailResult(payload []byte) (detail ItemResultResponse, err error) 
 		fees := shippingFeeConfig.Get("fees").MustArray()
 		for _, fee := range fees {
 			feeMap := fee.(map[string]interface{})
-			// 检查 displayName 是否为 "大阪"
 			if feeMap["displayName"] == "大阪" {
 				data.ShippingPayer.Fee = feeMap["price"].(int)
 				break
