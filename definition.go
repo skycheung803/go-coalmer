@@ -224,6 +224,17 @@ type ShippingPayer struct {
 	MaxFee int    `json:"max_fee"`
 }
 
+type AuctionInfo struct {
+	ID                         string `json:"id"`
+	StartTime                  int64  `json:"start_time"`
+	ExpectedEndTime            int64  `json:"expected_end_time"`
+	BidDeadlineDurationSeconds int64  `json:"bid_deadline_duration_seconds"`
+	BidTotalDurationSeconds    int64  `json:"bid_total_duration_seconds"`
+	TotalBids                  int    `json:"total_bids"`
+	HighestBid                 int    `json:"highest_bid"`
+	State                      string `json:"state"`
+}
+
 // Item() response body
 type ItemResultResponse struct {
 	Result string                 `json:"result"`
@@ -262,6 +273,7 @@ type MercariDetail struct {
 	UpdatedStr         string         `json:"UpdatedStr"`
 	Related            []RelatedItem  `json:"related"`
 	SimilarLooks       []SimilarItem  `json:"similar_looks,omitempty"`
+	AuctionInfo        AuctionInfo    `json:"auction_info,omitempty"`
 }
 
 type ItemSellerInfo struct {

@@ -203,6 +203,7 @@ func (a *APIFetcher) Detail(id string) (response ItemResultResponse, err error) 
 func (a *APIFetcher) Item(id string) (response ItemResultResponse, err error) {
 	reqVal := url.Values{}
 	reqVal.Add("id", id)
+	reqVal.Add("include_auction", "true")
 	link := fmt.Sprintf("%s?%s", itemParams.URL, reqVal.Encode())
 
 	headers, err := generateHeader(link, itemParams.Method)
