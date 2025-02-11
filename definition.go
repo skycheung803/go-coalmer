@@ -227,11 +227,13 @@ type ShippingPayer struct {
 type AuctionInfo struct {
 	ID                         string `json:"id"`
 	StartTime                  int64  `json:"start_time"`
+	FinishTime                 int64  `json:"finish_time"`
 	ExpectedEndTime            int64  `json:"expected_end_time"`
 	BidDeadlineDurationSeconds int64  `json:"bid_deadline_duration_seconds"`
 	BidTotalDurationSeconds    int64  `json:"bid_total_duration_seconds"`
 	TotalBids                  int    `json:"total_bids"`
 	HighestBid                 int    `json:"highest_bid"`
+	WinnerId                   string `json:"winner_id"`
 	State                      string `json:"state"`
 }
 
