@@ -83,7 +83,11 @@ func ProductDetailResult(payload []byte) (detail ItemResultResponse, err error) 
 		for _, fee := range fees {
 			feeMap := fee.(map[string]interface{})
 			if feeMap["displayName"] == "大阪" {
-				data.ShippingPayer.Fee = feeMap["price"].(int)
+				price := feeMap["price"].(json.Number)
+				priceInt, err := price.Int64()
+				if err == nil {
+					data.ShippingPayer.Fee = int(priceInt)
+				}
 				break
 			}
 		}
