@@ -1,6 +1,8 @@
 package coalmer
 
-import "net/http"
+import (
+	"net/http"
+)
 
 const (
 	ApiURL  = "https://api.mercari.jp/"
@@ -237,6 +239,24 @@ type AuctionInfo struct {
 	State                      string `json:"state"`
 }
 
+type Breakdown struct {
+	CouponDiscount int `json:"coupon_discount"`
+	OfferDiscount  int `json:"offer_discount"`
+	Total          int `json:"total"`
+}
+
+type OfferCouponDisplay struct {
+	DisplayText          string    `json:"display_text"`
+	DisplayPrice         int       `json:"display_price"`
+	DisplayDiscountLabel string    `json:"display_discount_label"`
+	IncludeCoupon        bool      `json:"include_coupon"`
+	ExpireTime           int64     `json:"expire_time"`  // Unix timestamp
+	CurrentTime          int64     `json:"current_time"` // Unix timestamp
+	Repeated             bool      `json:"repeated"`
+	Breakdown            Breakdown `json:"breakdown"`
+	Omakase              bool      `json:"omakase"`
+}
+
 // Item() response body
 type ItemResultResponse struct {
 	Result string                 `json:"result"`
@@ -247,35 +267,36 @@ type ItemResultResponse struct {
 
 // Item() response body item part
 type MercariDetail struct {
-	Url                string         `json:"url"`
-	ProductId          string         `json:"id"`
-	ProductName        string         `json:"name"`
-	Price              int            `json:"price"`
-	Seller             ItemSellerInfo `json:"seller"`
-	Status             string         `json:"status"`
-	Description        string         `json:"description"`
-	Condition          Name_Id_Unit   `json:"item_condition"`
-	Brand              Name_Id_Unit   `json:"item_brand"`
-	Like               int            `json:"num_likes"`
-	Comment            int            `json:"num_comments"`
-	Photos             []string       `json:"photos"`
-	AnonymousShipping  bool           `json:"is_anonymous_shipping"`
-	ShippingDuration   Name_Id_Unit   `json:"shipping_duration"`
-	ShippingFrom       Name_Id_Unit   `json:"shipping_from_area"`
-	ShippingMethod     Name_Id_Unit   `json:"shipping_method"`
-	ShippingPayer      ShippingPayer  `json:"shipping_payer"`
-	ItemSize           Name_Id_Unit   `json:"item_size"`
-	Colors             []Name_Id_Unit `json:"colors"`
-	ItemCategory       Name_Id_Unit   `json:"item_category"`
-	ItemCategoryNtiers Name_Id_Unit   `json:"item_category_ntiers,omitempty"`
-	ParentCategories   []Name_Id_Unit `json:"parent_categories_ntiers,omitempty"`
-	Categories         []Name_Id_Unit `json:"categories"`
-	Created            int64          `json:"created"`
-	Updated            int64          `json:"updated"`
-	UpdatedStr         string         `json:"UpdatedStr"`
-	Related            []RelatedItem  `json:"related"`
-	SimilarLooks       []SimilarItem  `json:"similar_looks,omitempty"`
-	AuctionInfo        AuctionInfo    `json:"auction_info,omitempty"`
+	Url                string             `json:"url"`
+	ProductId          string             `json:"id"`
+	ProductName        string             `json:"name"`
+	Price              int                `json:"price"`
+	Seller             ItemSellerInfo     `json:"seller"`
+	Status             string             `json:"status"`
+	Description        string             `json:"description"`
+	Condition          Name_Id_Unit       `json:"item_condition"`
+	Brand              Name_Id_Unit       `json:"item_brand"`
+	Like               int                `json:"num_likes"`
+	Comment            int                `json:"num_comments"`
+	Photos             []string           `json:"photos"`
+	AnonymousShipping  bool               `json:"is_anonymous_shipping"`
+	ShippingDuration   Name_Id_Unit       `json:"shipping_duration"`
+	ShippingFrom       Name_Id_Unit       `json:"shipping_from_area"`
+	ShippingMethod     Name_Id_Unit       `json:"shipping_method"`
+	ShippingPayer      ShippingPayer      `json:"shipping_payer"`
+	ItemSize           Name_Id_Unit       `json:"item_size"`
+	Colors             []Name_Id_Unit     `json:"colors"`
+	ItemCategory       Name_Id_Unit       `json:"item_category"`
+	ItemCategoryNtiers Name_Id_Unit       `json:"item_category_ntiers,omitempty"`
+	ParentCategories   []Name_Id_Unit     `json:"parent_categories_ntiers,omitempty"`
+	Categories         []Name_Id_Unit     `json:"categories"`
+	Created            int64              `json:"created"`
+	Updated            int64              `json:"updated"`
+	UpdatedStr         string             `json:"UpdatedStr"`
+	Related            []RelatedItem      `json:"related"`
+	SimilarLooks       []SimilarItem      `json:"similar_looks,omitempty"`
+	AuctionInfo        AuctionInfo        `json:"auction_info,omitempty"`
+	OfferCoupon        OfferCouponDisplay `json:"offer_coupon_display,omitempty"`
 }
 
 type ItemSellerInfo struct {
