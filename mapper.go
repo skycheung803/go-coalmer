@@ -93,6 +93,25 @@ func ProductDetailResult(payload []byte) (detail ItemResultResponse, err error) 
 		}
 	}
 
+	timeSaleDetails := productDetail.Get("timeSaleDetails")
+	if timeSaleDetails.Interface() != nil {
+		percentage := timeSaleDetails.Get("percentage").MustInt()
+		priceStr := timeSaleDetails.Get("price").MustString()
+
+		priceInt, _ := strconv.Atoi(priceStr)
+		endTime := timeSaleDetails.Get("endTime").MustString()
+
+		endTimeParsed, err := time.Parse(time.RFC3339, endTime)
+		if err == nil {
+			data.OfferCoupon.ExpireTime = endTimeParsed.Unix()
+		}
+		data.OfferCoupon.CurrentTime = time.Now().Unix()
+		data.OfferCoupon.DisplayPrice = priceInt
+		data.OfferCoupon.DisplayText = "限定値下げ中"
+		data.OfferCoupon.DisplayDiscountLabel = fmt.Sprintf("%d%%OFF", percentage)
+		data.OfferCoupon.Breakdown.Total = percentage
+	}
+
 	detail.Result = "OK"
 	detail.Data = data
 	return detail, nil

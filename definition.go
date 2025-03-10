@@ -254,7 +254,6 @@ type OfferCouponDisplay struct {
 	CurrentTime          int64     `json:"current_time"` // Unix timestamp
 	Repeated             bool      `json:"repeated"`
 	Breakdown            Breakdown `json:"breakdown"`
-	Omakase              bool      `json:"omakase"`
 }
 
 // Item() response body
