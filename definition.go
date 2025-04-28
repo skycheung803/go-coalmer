@@ -210,6 +210,8 @@ type Item struct {
 	Buyer         string   `json:"buyerId,omitempty"`
 	Created       string   `json:"created"`
 	Updated       string   `json:"updated"`
+	IsNoPrice     bool     `json:"isNoPrice"`
+	IsNoPrice2    bool     `json:"is_no_price"`
 }
 
 type Name_Id_Unit struct {
@@ -296,6 +298,8 @@ type MercariDetail struct {
 	SimilarLooks       []SimilarItem      `json:"similar_looks,omitempty"`
 	AuctionInfo        AuctionInfo        `json:"auction_info,omitempty"`
 	OfferCoupon        OfferCouponDisplay `json:"offer_coupon_display,omitempty"`
+	IsNoPrice          bool               `json:"is_no_price"`
+	//Hashtag            []string           `json:"hashtag,omitempty"`  //価格がつけられないもの  is no price
 }
 
 type ItemSellerInfo struct {
@@ -328,6 +332,7 @@ type RelatedItem struct {
 	Thumbnail  string   `json:"thumbnail"`
 	Thumbnails []string `json:"thumbnails"`
 	ItemType   string   `json:"item_type,omitempty"`
+	IsNoPrice  bool     `json:"is_no_price"`
 }
 
 // related item response body

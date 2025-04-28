@@ -24,11 +24,11 @@ func init() {
 func main() {
 	log.Println("--------------------- start ---------------------")
 	//index(20)
-	detail("m43989853551")
-	//detail("m43250958296")
+	//detail("m43989853551")
+	detail("m87418231981")
 	//detail("z7DYa2QbrbC2LwyXV9edZ7")
-	//detail("8NhEyjQNedXNuJPv7YQEiP")
-	//detail("8NhEyjQNedXNuJPv7YQEiPppppp")
+	//detail("jkbmuTtmnaKBTScFL42JKJ")
+	//detail("QmLyFEaWCriTHvZjXzsqbA")
 	log.Println("--------------------- index  Finish -----------------------------")
 	//search()
 	log.Println("--------------------- search Finish -----------------------------")
@@ -74,14 +74,14 @@ func detail(id string) {
 }
 
 func seller() {
-	//res, err := Coalmer.Fetcher.Seller("755873977", "") // 755873977   GqU4Yahsuz6LW3NZZR53T8
-	res, err := Coalmer.Fetcher.Seller("GqU4Yahsuz6LW3NZZR53T89999999", "") // 755873977   GqU4Yahsuz6LW3NZZR53T8
+	res, err := Coalmer.Fetcher.Seller("522563101", "") // 755873977   GqU4Yahsuz6LW3NZZR53T8
+	//res, err := Coalmer.Fetcher.Seller("GqU4Yahsuz6LW3NZZR53T89999999", "") // 755873977   GqU4Yahsuz6LW3NZZR53T8
 	//coalmer.Dump(res)
 	if err != nil {
 		panic(err)
 	}
-	//coalmer.Dump(res)
-	log.Println(res.Profile.Name)
+	coalmer.Dump(res)
+	//log.Println(res.Profile.Name)
 }
 
 func search() {
@@ -98,7 +98,8 @@ func search() {
 	p := coalmer.SearchData{}
 	//params := `{"keyword":"agd","category_id":[14],"price_min":5000,"price_max":8000,"sort":"","item_condition_id":[],"page":0}`
 	//params := `{"keyword":"999UNION HORLOGERE 腕時計 19015N007SS 鑑定済み ブランド","category_id":[414],"sort":"","item_condition_id":[],"item_types":["beyond"],"price_min":0,"price_max":0,"page":0,"brand_id":[],"color_id":[],"status":[]}`
-	params := `{"keyword":"UNION HORLOGERE 腕時計 19015N007SS 鑑定済み ブランド","category_id":[414],"sort":"","item_condition_id":[],"item_types":["beyond"],"price_min":0,"price_max":0,"page":0,"brand_id":[],"color_id":[],"status":[]}`
+	//params := `{"keyword":"UNION HORLOGERE 腕時計 19015N007SS 鑑定済み ブランド","category_id":[414],"sort":"","item_condition_id":[],"item_types":["beyond"],"price_min":0,"price_max":0,"page":0,"brand_id":[],"color_id":[],"status":[]}`
+	params := `{"keyword":"ホワイトスネイク　ツアーパンフレット'80"}`
 	json.Unmarshal([]byte(params), &p)
 	fmt.Printf("%+v\n", p)
 	//coalmer.Dump(p)

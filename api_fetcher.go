@@ -153,17 +153,17 @@ func (a *APIFetcher) Search(params SearchData) (response SearchResponse, err err
 		return
 	}
 
-	fmt.Println(resp.StatusCode)
-	//fmt.Println(resp.String())
 	if resp.IsErrorState() {
 		response.Result = "error"
 		err = fmt.Errorf("mercari search api error: %s", errMsg.Message)
 		return
 	}
 
-	//if len(response.Items) > 0 {
+	for k, v := range response.Items {
+		response.Items[k].IsNoPrice2 = v.IsNoPrice
+	}
+
 	response.Result = "OK"
-	//}
 	return
 }
 
@@ -253,6 +253,10 @@ func (a *APIFetcher) Item(id string) (response ItemResultResponse, err error) {
 
 	if err2 == nil {
 		response.Data.SimilarLooks = similarLooksResponse.Items
+	}
+
+	if response.Data.Price == 9999999 {
+		response.Data.IsNoPrice = true
 	}
 
 	return
