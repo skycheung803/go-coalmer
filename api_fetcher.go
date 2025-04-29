@@ -4,13 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"net/url"
 	"strconv"
 	"strings"
 	"sync"
 
-	"github.com/go-rod/rod/lib/utils"
 	"github.com/imroc/req/v3"
 )
 
@@ -186,8 +184,8 @@ func (a *APIFetcher) Search(params SearchData) (response SearchResponse, err err
 		return
 	}
 
-	utils.Dump(params)
-	log.Println("SearchData:", queryData)
+	//utils.Dump(params)
+	//log.Println("SearchData:", queryData)
 
 	headers, err := generateHeader(searchParams.URL, searchParams.Method)
 	if err != nil {
