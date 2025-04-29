@@ -80,8 +80,8 @@ func apiSearchParse(p SearchData) (string, error) {
 		sp.SearchCondition.Sort = strings.ToUpper("SORT_" + p.Sort)
 		sp.SearchCondition.Order = strings.ToUpper("ORDER_" + p.Order)
 	} else {
-		sp.SearchCondition.Sort = SearchOptionSortCreatedTime
-		//sp.SearchCondition.Sort = SearchOptionSortScore
+		//sp.SearchCondition.Sort = SearchOptionSortCreatedTime
+		sp.SearchCondition.Sort = SearchOptionSortScore
 		sp.SearchCondition.Order = SearchOptionOrderDESC
 	}
 
