@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"net/url"
 	"strconv"
 	"strings"
 	"sync"
 
+	"github.com/go-rod/rod/lib/utils"
 	"github.com/imroc/req/v3"
 )
 
@@ -60,14 +62,20 @@ func apiSearchParse(p SearchData) (string, error) {
 
 	if len(p.CategoryId) > 0 {
 		sp.SearchCondition.CategoryId = p.CategoryId
+	} else {
+		sp.SearchCondition.CategoryId = []int{}
 	}
 
 	if len(p.ConditionId) > 0 {
 		sp.SearchCondition.ItemConditionId = p.ConditionId
+	} else {
+		sp.SearchCondition.ItemConditionId = []int{}
 	}
 
 	if len(p.ColorId) > 0 {
 		sp.SearchCondition.ColorId = p.ColorId
+	} else {
+		sp.SearchCondition.ColorId = []int{}
 	}
 
 	if p.Sort != "" && p.Order != "" {
@@ -75,6 +83,7 @@ func apiSearchParse(p SearchData) (string, error) {
 		sp.SearchCondition.Order = strings.ToUpper("ORDER_" + p.Order)
 	} else {
 		sp.SearchCondition.Sort = SearchOptionSortCreatedTime
+		//sp.SearchCondition.Sort = SearchOptionSortScore
 		sp.SearchCondition.Order = SearchOptionOrderDESC
 	}
 
@@ -96,6 +105,41 @@ func apiSearchParse(p SearchData) (string, error) {
 		if ok := Contains(p.ItemTypes, "beyond"); ok {
 			sp.SearchCondition.ItemTypes = append(sp.SearchCondition.ItemTypes, "ITEM_TYPE_BEYOND")
 		}
+	}
+
+	if sp.SearchCondition.ItemTypes == nil {
+		sp.SearchCondition.ItemTypes = []string{}
+	}
+	if sp.SearchCondition.SellerId == nil {
+		sp.SearchCondition.SellerId = []string{}
+	}
+
+	if sp.SearchCondition.BrandId == nil {
+		sp.SearchCondition.BrandId = []int{}
+	}
+
+	if sp.SearchCondition.SizeId == nil {
+		sp.SearchCondition.SizeId = []any{}
+	}
+
+	if sp.SearchCondition.SizeId == nil {
+		sp.SearchCondition.SizeId = []any{}
+	}
+
+	if sp.SearchCondition.SKUIds == nil {
+		sp.SearchCondition.SKUIds = []any{}
+	}
+
+	if sp.SearchCondition.ShippingFromArea == nil {
+		sp.SearchCondition.ShippingFromArea = []any{}
+	}
+
+	if sp.SearchCondition.ShippingMethod == nil {
+		sp.SearchCondition.ShippingMethod = []any{}
+	}
+
+	if sp.SearchCondition.ShippingPayerId == nil {
+		sp.SearchCondition.ShippingPayerId = []any{}
 	}
 
 	sp.SearchSessionId = generateSearchSessionId(DefaultLengthSearchSessionId)
@@ -141,6 +185,9 @@ func (a *APIFetcher) Search(params SearchData) (response SearchResponse, err err
 	if err != nil {
 		return
 	}
+
+	utils.Dump(params)
+	log.Println("SearchData:", queryData)
 
 	headers, err := generateHeader(searchParams.URL, searchParams.Method)
 	if err != nil {
