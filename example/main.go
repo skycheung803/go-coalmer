@@ -25,12 +25,12 @@ func main() {
 	log.Println("--------------------- start ---------------------")
 	//index(20)
 	//detail("m43989853551")
-	detail("m87418231981")
+	//detail("m87418231981")
 	//detail("z7DYa2QbrbC2LwyXV9edZ7")
 	//detail("jkbmuTtmnaKBTScFL42JKJ")
 	//detail("QmLyFEaWCriTHvZjXzsqbA")
 	log.Println("--------------------- index  Finish -----------------------------")
-	//search()
+	search()
 	log.Println("--------------------- search Finish -----------------------------")
 	//detail("m12958444254")
 	//detail("m58457143925")
@@ -99,16 +99,17 @@ func search() {
 	//params := `{"keyword":"agd","category_id":[14],"price_min":5000,"price_max":8000,"sort":"","item_condition_id":[],"page":0}`
 	//params := `{"keyword":"999UNION HORLOGERE 腕時計 19015N007SS 鑑定済み ブランド","category_id":[414],"sort":"","item_condition_id":[],"item_types":["beyond"],"price_min":0,"price_max":0,"page":0,"brand_id":[],"color_id":[],"status":[]}`
 	//params := `{"keyword":"UNION HORLOGERE 腕時計 19015N007SS 鑑定済み ブランド","category_id":[414],"sort":"","item_condition_id":[],"item_types":["beyond"],"price_min":0,"price_max":0,"page":0,"brand_id":[],"color_id":[],"status":[]}`
-	params := `{"keyword":"ホワイトスネイク　ツアーパンフレット'80"}`
+	//params := `{"keyword":"ホワイトスネイク　ツアーパンフレット'80"}`
+	params := `{"keyword":"シャーロット"}`
 	json.Unmarshal([]byte(params), &p)
 	fmt.Printf("%+v\n", p)
 	//coalmer.Dump(p)
 	res, err := Coalmer.Fetcher.Search(p)
-	coalmer.Dump(res)
+	//coalmer.Dump(res)
 	if err != nil {
 		panic(err)
 	}
 
-	log.Println(len(res.Items))
-	//coalmer.Dump(res)
+	//log.Println(len(res.Items))
+	coalmer.Dump(res.Meta)
 }
