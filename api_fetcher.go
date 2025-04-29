@@ -184,9 +184,6 @@ func (a *APIFetcher) Search(params SearchData) (response SearchResponse, err err
 		return
 	}
 
-	//utils.Dump(params)
-	//log.Println("SearchData:", queryData)
-
 	headers, err := generateHeader(searchParams.URL, searchParams.Method)
 	if err != nil {
 		return
