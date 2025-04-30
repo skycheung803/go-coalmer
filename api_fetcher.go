@@ -297,8 +297,11 @@ func (a *APIFetcher) Item(id string) (response ItemResultResponse, err error) {
 		response.Data.SimilarLooks = similarLooksResponse.Items
 	}
 
-	if response.Data.Price == 9999999 {
-		response.Data.IsNoPrice = true
+	for _, v := range response.Data.Hashtags {
+		if v == "価格がつけられないもの" {
+			response.Data.IsNoPrice = true
+			break
+		}
 	}
 
 	return

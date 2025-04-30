@@ -299,7 +299,7 @@ type MercariDetail struct {
 	AuctionInfo        AuctionInfo        `json:"auction_info,omitempty"`
 	OfferCoupon        OfferCouponDisplay `json:"offer_coupon_display,omitempty"`
 	IsNoPrice          bool               `json:"is_no_price"`
-	//Hashtag            []string           `json:"hashtag,omitempty"`  //価格がつけられないもの  is no price
+	Hashtags           []string           `json:"hash_tags"` //価格がつけられないもの  is no price
 }
 
 type ItemSellerInfo struct {
