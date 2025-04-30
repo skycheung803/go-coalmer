@@ -9,6 +9,8 @@ import (
 	"strings"
 	"sync"
 
+	"slices"
+
 	"github.com/imroc/req/v3"
 )
 
@@ -297,11 +299,8 @@ func (a *APIFetcher) Item(id string) (response ItemResultResponse, err error) {
 		response.Data.SimilarLooks = similarLooksResponse.Items
 	}
 
-	for _, v := range response.Data.Hashtags {
-		if v == "価格がつけられないもの" {
-			response.Data.IsNoPrice = true
-			break
-		}
+	if slices.Contains(response.Data.Hashtags, "価格がつけられないもの") {
+		response.Data.IsNoPrice = true
 	}
 
 	return
