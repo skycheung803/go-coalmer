@@ -138,7 +138,7 @@ type SearchData struct {
 	ItemTypes         []string `json:"item_types"`
 	Page              int      `json:"page"`
 	Limit             int      `json:"limit"`
-	ImageUri          string   `json:"imageUri"`
+	ImageUri          string   `json:"image_uri"`
 	SearchConditionId string   `json:"search_condition_id"`
 }
 

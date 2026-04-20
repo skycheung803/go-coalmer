@@ -1,4 +1,3 @@
-/*
 package main
 
 import (
@@ -18,11 +17,11 @@ func init() {
 func main() {
 	//detail()
 	//related()
-	search()
+	//search()
 	//seller()
 	//similarLooks()
 	//profile()
-	//searchByImage()
+	searchByImage()
 }
 
 func detail() {
