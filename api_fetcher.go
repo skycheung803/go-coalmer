@@ -522,6 +522,10 @@ func (a *APIFetcher) Profile(user_id string) (response SellerProfileResponse, er
 
 func ImageSearchParse(params SearchData) (string, error) {
 
+	if params.ImageUri == "" {
+		return "", fmt.Errorf("image_uri is required")
+	}
+
 	searchCondition, _ := SearchConditionParse(params)
 	searchCondition.Sort = SearchOptionSortSimilarity
 	searchCondition.Order = SearchOptionOrderDESC
