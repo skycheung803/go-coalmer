@@ -141,6 +141,18 @@ func webSearchParse(p SearchData) string {
 	return link
 }
 
+func getIdFromLink(link string) string {
+	u, err := url.Parse(link)
+	if err != nil {
+		return ""
+	}
+	if u.Path == "" {
+		return ""
+	}
+	parts := strings.Split(u.Path, "/")
+	return parts[len(parts)-1]
+}
+
 func (w *WebFetcher) getHtml(link string, wait_selector string) (html string) {
 	//log.Println(link)
 	//@link https://go-rod.github.io/#/context-and-timeout?id=timeout
@@ -688,14 +700,7 @@ func (w *WebFetcher) ShopProducts(seller_id, pager_id string) (response SellerPr
 	return response, nil
 }
 
-func getIdFromLink(link string) string {
-	u, err := url.Parse(link)
-	if err != nil {
-		return ""
-	}
-	if u.Path == "" {
-		return ""
-	}
-	parts := strings.Split(u.Path, "/")
-	return parts[len(parts)-1]
+// @todo search by image
+func (w *WebFetcher) SearchByImage(s SearchData) (response ImageSearchResponse, err error) {
+	return
 }

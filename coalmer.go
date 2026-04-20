@@ -16,6 +16,9 @@ type DataFetcher interface {
 
 	// Seller retrieves a list of products from a specific seller.
 	Seller(sellerId string, pager_id string) (SellerProductsResponse, error)
+
+	// SearchByImage for items based on the provided image data.
+	SearchByImage(s SearchData) (ImageSearchResponse, error)
 }
 
 type mode string
