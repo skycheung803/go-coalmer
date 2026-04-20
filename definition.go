@@ -8,18 +8,15 @@ const (
 	ApiURL  = "https://api.mercari.jp/"
 	RootURL = "https://jp.mercari.com/"
 	ShopURL = "https://mercari-shops.com/"
-)
 
-const (
 	DefaultLengthSearchSessionId = 32
 	DefaultPageSize              = 60
-)
 
-const (
 	SearchOptionSortScore       = "SORT_SCORE"
 	SearchOptionSortPrice       = "SORT_PRICE"
 	SearchOptionSortNumLikes    = "SORT_NUM_LIKES"
 	SearchOptionSortCreatedTime = "SORT_CREATED_TIME"
+	SearchOptionSortSimilarity  = "SORT_SIMILARITY"
 
 	SearchOptionOrderDESC = "ORDER_DESC"
 	SearchOptionOrderASC  = "ORDER_ASC"
@@ -32,80 +29,90 @@ var (
 	webShopsItemURL   = RootURL + "shops/product/"
 	webSellerURL      = RootURL + "user/profile/"
 	webShopsSellerURL = ShopURL + "shops/"
+	webImageSearchURL = ApiURL + "v2/entities:search/"
+
+	indexParams = struct {
+		URL    string
+		Method string
+	}{
+		URL:    ApiURL + "store/get_items",
+		Method: http.MethodGet,
+	}
+
+	searchParams = struct {
+		URL    string
+		Method string
+	}{
+		URL:    ApiURL + "v2/entities:search",
+		Method: http.MethodPost,
+	}
+
+	itemParams = struct {
+		URL    string
+		Method string
+	}{
+		URL:    ApiURL + "items/get",
+		Method: http.MethodGet,
+	}
+
+	shopItemParams = struct {
+		URL    string
+		Method string
+	}{
+		URL:    ApiURL + "v1/marketplaces/shops/products",
+		Method: http.MethodGet,
+	}
+
+	relatedParams = struct {
+		URL    string
+		Method string
+	}{
+		URL:    ApiURL + "items/related_items",
+		Method: http.MethodGet,
+	}
+
+	profileParams = struct {
+		URL    string
+		Method string
+	}{
+		URL:    ApiURL + "users/get_profile",
+		Method: http.MethodGet,
+	}
+
+	// similarLooks items
+	similarLooksParams = struct {
+		URL    string
+		Method string
+	}{
+		URL:    ApiURL + "v2/relateditems/component",
+		Method: http.MethodPost,
+	}
+
+	// similarLooks items
+	imageSearchParams = struct {
+		URL    string
+		Method string
+	}{
+		URL:    ApiURL + "v2/entities:imageSearch",
+		Method: http.MethodPost,
+	}
+
+	sellerProductParams = struct {
+		URL    string
+		Method string
+	}{
+		URL:    ApiURL + "items/get_items",
+		Method: http.MethodGet,
+	}
+
+	shopProductParams = struct {
+		URL    string
+		Method string
+	}{
+		URL:    ShopURL + "graphql",
+		Method: http.MethodPost,
+	}
 )
-
-var indexParams = struct {
-	URL    string
-	Method string
-}{
-	URL:    ApiURL + "store/get_items",
-	Method: http.MethodGet,
-}
-
-var searchParams = struct {
-	URL    string
-	Method string
-}{
-	URL:    ApiURL + "v2/entities:search",
-	Method: http.MethodPost,
-}
-
-var itemParams = struct {
-	URL    string
-	Method string
-}{
-	URL:    ApiURL + "items/get",
-	Method: http.MethodGet,
-}
-
-var shopItemParams = struct {
-	URL    string
-	Method string
-}{
-	URL:    ApiURL + "v1/marketplaces/shops/products",
-	Method: http.MethodGet,
-}
-
-var relatedParams = struct {
-	URL    string
-	Method string
-}{
-	URL:    ApiURL + "items/related_items",
-	Method: http.MethodGet,
-}
-
-var profileParams = struct {
-	URL    string
-	Method string
-}{
-	URL:    ApiURL + "users/get_profile",
-	Method: http.MethodGet,
-}
-
-// similarLooks items
-var similarLooksParams = struct {
-	URL    string
-	Method string
-}{
-	URL:    ApiURL + "v2/relateditems/component",
-	Method: http.MethodPost,
-}
-
-var sellerProductParams = struct {
-	URL    string
-	Method string
-}{
-	URL:    ApiURL + "items/get_items",
-	Method: http.MethodGet,
-}
-
-var shopProductParams = struct {
-	URL    string
-	Method string
-}{
-	URL:    ShopURL + "graphql",
-	Method: http.MethodPost,
-}
 
 type xerror struct {
 	Code    string `json:"code"`
@@ -131,6 +138,7 @@ type SearchData struct {
 	ItemTypes         []string `json:"item_types"`
 	Page              int      `json:"page"`
 	Limit             int      `json:"limit"`
+	ImageUri          string   `json:"imageUri"`
 	SearchConditionId string   `json:"search_condition_id"`
 }
 
@@ -469,8 +477,47 @@ type SimilarLooksResponse struct {
 	Items []SimilarItem `json:"items"`
 }
 
-/*
+type ImageSearchCondition struct {
+	ImageUri        string                `json:"imageUri"`
+	SearchCondition V2SearchRequestDetail `json:"searchCondition"`
+}
 
+type ImageSearchConfig struct {
+	ResponseToggles []string `json:"responseToggles"`
+}
+
+type ImageSearchData struct {
+	Config               ImageSearchConfig    `json:"config"`
+	ImageSearchCondition ImageSearchCondition `json:"imageSearchCondition"`
+	PageSize             int                  `json:"pageSize"`
+	PageToken            string               `json:"pageToken"`
+	SearchSessionId      string               `json:"searchSessionId"`
+}
+
+type Facets struct {
+	CategoryId int    `json:"categoryId"`
+	Title      string `json:"title"`
+}
+
+type CategoryFacetsSuggest struct {
+	Facets []Facets `json:"facets"`
+}
+
+type Component struct {
+	CategoryFacetsSuggest `json:"categoryFacetsSuggest"`
+}
+
+type ImageSearchResponse struct {
+	Result     string   `json:"result"` // OK or error
+	Errors     []xerror `json:"errors,omitempty"`
+	Items      []Item   `json:"items"`
+	Components []struct {
+		Component Component `json:"component"`
+	} `json:"components,omitempty"`
+	//Meta       struct{}    `json:"meta"`
+}
+
+/*
 {
     "result": "error",
     "errors": [

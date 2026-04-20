@@ -20,20 +20,129 @@ type APIFetcher struct {
 
 func NewAPIFetcher(debug bool) *APIFetcher {
 	Client := req.C()
-	Client.ImpersonateChrome() // 伪装 HTTP 指纹
+	Client.ImpersonateChrome()
 	if debug {
-		Client.DevMode() // 启用开发模式
+		Client.DevMode()
 	}
 
 	return &APIFetcher{
 		Client: Client,
 	}
 }
+func SearchConditionParse(p SearchData) (V2SearchRequestDetail, error) {
+	sp := V2SearchRequestDetail{}
+	sp.HasCoupon = false
+	sp.Keyword = p.Keyword
+
+	if p.PriceMin > p.PriceMax {
+		p.PriceMin, p.PriceMax = p.PriceMax, p.PriceMin
+	}
+
+	if p.PriceMin > 0 {
+		sp.PriceMin = p.PriceMin
+	}
+	if p.PriceMax > 0 {
+		sp.PriceMax = p.PriceMax
+	}
+
+	if len(p.CategoryId) > 0 {
+		sp.CategoryId = p.CategoryId
+	} else {
+		sp.CategoryId = []int{}
+	}
+
+	if len(p.ConditionId) > 0 {
+		sp.ItemConditionId = p.ConditionId
+	} else {
+		sp.ItemConditionId = []int{}
+	}
+
+	if len(p.ColorId) > 0 {
+		sp.ColorId = p.ColorId
+	} else {
+		sp.ColorId = []int{}
+	}
+
+	if p.Sort != "" && p.Order != "" {
+		sp.Sort = strings.ToUpper("SORT_" + p.Sort)
+		sp.Order = strings.ToUpper("ORDER_" + p.Order)
+	} else {
+		sp.Sort = SearchOptionSortScore
+		sp.Order = SearchOptionOrderDESC
+	}
+
+	if len(p.Status) > 0 {
+		if ok := Contains(p.Status, "on_sale"); ok {
+			sp.Status = append(sp.Status, "STATUS_ON_SALE")
+		}
+
+		if ok := Contains(p.Status, "sold_out"); ok {
+			sp.Status = append(sp.Status, "STATUS_SOLD_OUT", "STATUS_TRADING")
+		}
+	}
+
+	if len(p.ItemTypes) > 0 {
+		if ok := Contains(p.ItemTypes, "mercari"); ok {
+			sp.ItemTypes = append(sp.ItemTypes, "ITEM_TYPE_MERCARI")
+		}
+
+		if ok := Contains(p.ItemTypes, "beyond"); ok {
+			sp.ItemTypes = append(sp.ItemTypes, "ITEM_TYPE_BEYOND")
+		}
+	}
+
+	if sp.ItemTypes == nil {
+		sp.ItemTypes = []string{}
+	}
+	if sp.SellerId == nil {
+		sp.SellerId = []string{}
+	}
+
+	if sp.BrandId == nil {
+		sp.BrandId = []int{}
+	}
+
+	if sp.SizeId == nil {
+		sp.SizeId = []any{}
+	}
+
+	if sp.SizeId == nil {
+		sp.SizeId = []any{}
+	}
+
+	if sp.SKUIds == nil {
+		sp.SKUIds = []any{}
+	}
+
+	if sp.ShippingFromArea == nil {
+		sp.ShippingFromArea = []any{}
+	}
+
+	if sp.ShippingMethod == nil {
+		sp.ShippingMethod = []any{}
+	}
+
+	if sp.ShippingPayerId == nil {
+		sp.ShippingPayerId = []any{}
+	}
+
+	return sp, nil
+}
 
 func apiSearchParse(p SearchData) (string, error) {
 	sp := V2Search{}
 	//sp.DefaultDatabases = []string{"DATASET_TYPE_MERCARI", "DATASET_TYPE_BEYOND"}
+	sp.ServiceFrom = "suruga"
+	sp.WithItemBrand = true
+	sp.WithItemPromotions = true
+	sp.WithItemSize = false
+	sp.WithItemSizes = true
+	sp.WithShopName = false
 	sp.IndexRouting = "INDEX_ROUTING_UNSPECIFIED"
+
+	sp.SearchCondition, _ = SearchConditionParse(p)
+	sp.SearchSessionId = generateSearchSessionId(DefaultLengthSearchSessionId)
+
 	if p.Limit > 0 {
 		sp.PageSize = p.Limit
 	} else {
@@ -43,112 +152,6 @@ func apiSearchParse(p SearchData) (string, error) {
 	if p.Page > 0 {
 		sp.PageToken = fmt.Sprintf("v1:%d", p.Page)
 	}
-
-	// searchCondition
-	sp.SearchCondition.HasCoupon = false
-	//sp.SearchCondition.Status = []string{"STATUS_ON_SALE"} //"STATUS_ON_SALE", "STATUS_TRADING", "STATUS_SOLD_OUT"
-	sp.SearchCondition.Keyword = p.Keyword
-
-	if p.PriceMin > p.PriceMax {
-		p.PriceMin, p.PriceMax = p.PriceMax, p.PriceMin
-	}
-
-	if p.PriceMin > 0 {
-		sp.SearchCondition.PriceMin = p.PriceMin
-	}
-	if p.PriceMax > 0 {
-		sp.SearchCondition.PriceMax = p.PriceMax
-	}
-
-	if len(p.CategoryId) > 0 {
-		sp.SearchCondition.CategoryId = p.CategoryId
-	} else {
-		sp.SearchCondition.CategoryId = []int{}
-	}
-
-	if len(p.ConditionId) > 0 {
-		sp.SearchCondition.ItemConditionId = p.ConditionId
-	} else {
-		sp.SearchCondition.ItemConditionId = []int{}
-	}
-
-	if len(p.ColorId) > 0 {
-		sp.SearchCondition.ColorId = p.ColorId
-	} else {
-		sp.SearchCondition.ColorId = []int{}
-	}
-
-	if p.Sort != "" && p.Order != "" {
-		sp.SearchCondition.Sort = strings.ToUpper("SORT_" + p.Sort)
-		sp.SearchCondition.Order = strings.ToUpper("ORDER_" + p.Order)
-	} else {
-		//sp.SearchCondition.Sort = SearchOptionSortCreatedTime
-		sp.SearchCondition.Sort = SearchOptionSortScore
-		sp.SearchCondition.Order = SearchOptionOrderDESC
-	}
-
-	if len(p.Status) > 0 {
-		if ok := Contains(p.Status, "on_sale"); ok {
-			sp.SearchCondition.Status = append(sp.SearchCondition.Status, "STATUS_ON_SALE")
-		}
-
-		if ok := Contains(p.Status, "sold_out"); ok {
-			sp.SearchCondition.Status = append(sp.SearchCondition.Status, "STATUS_SOLD_OUT", "STATUS_TRADING")
-		}
-	}
-
-	if len(p.ItemTypes) > 0 {
-		if ok := Contains(p.ItemTypes, "mercari"); ok {
-			sp.SearchCondition.ItemTypes = append(sp.SearchCondition.ItemTypes, "ITEM_TYPE_MERCARI")
-		}
-
-		if ok := Contains(p.ItemTypes, "beyond"); ok {
-			sp.SearchCondition.ItemTypes = append(sp.SearchCondition.ItemTypes, "ITEM_TYPE_BEYOND")
-		}
-	}
-
-	if sp.SearchCondition.ItemTypes == nil {
-		sp.SearchCondition.ItemTypes = []string{}
-	}
-	if sp.SearchCondition.SellerId == nil {
-		sp.SearchCondition.SellerId = []string{}
-	}
-
-	if sp.SearchCondition.BrandId == nil {
-		sp.SearchCondition.BrandId = []int{}
-	}
-
-	if sp.SearchCondition.SizeId == nil {
-		sp.SearchCondition.SizeId = []any{}
-	}
-
-	if sp.SearchCondition.SizeId == nil {
-		sp.SearchCondition.SizeId = []any{}
-	}
-
-	if sp.SearchCondition.SKUIds == nil {
-		sp.SearchCondition.SKUIds = []any{}
-	}
-
-	if sp.SearchCondition.ShippingFromArea == nil {
-		sp.SearchCondition.ShippingFromArea = []any{}
-	}
-
-	if sp.SearchCondition.ShippingMethod == nil {
-		sp.SearchCondition.ShippingMethod = []any{}
-	}
-
-	if sp.SearchCondition.ShippingPayerId == nil {
-		sp.SearchCondition.ShippingPayerId = []any{}
-	}
-
-	sp.SearchSessionId = generateSearchSessionId(DefaultLengthSearchSessionId)
-	sp.ServiceFrom = "suruga"
-	sp.WithItemBrand = true
-	sp.WithItemPromotions = true
-	sp.WithItemSize = false
-	sp.WithItemSizes = true
-	sp.WithShopName = false
 
 	res, err := json.Marshal(sp)
 	if err != nil {
@@ -514,5 +517,64 @@ func (a *APIFetcher) Profile(user_id string) (response SellerProfileResponse, er
 		response.Data.Code = strconv.Itoa(response.Data.ID)
 	}
 
+	return
+}
+
+func ImageSearchParse(params SearchData) (string, error) {
+
+	searchCondition, _ := SearchConditionParse(params)
+	searchCondition.Sort = SearchOptionSortSimilarity
+	searchCondition.Order = SearchOptionOrderDESC
+
+	ImageSearchCondition := ImageSearchCondition{
+		ImageUri:        params.ImageUri,
+		SearchCondition: searchCondition,
+	}
+	pageToken := ""
+	if params.Page > 0 {
+		pageToken = fmt.Sprintf("v1:%d", params.Page)
+	}
+
+	searchData := ImageSearchData{
+		Config: ImageSearchConfig{
+			ResponseToggles: []string{"WITH_FILTERING", "WITH_CATEGORY_FACETS_SUGGEST"},
+		},
+		ImageSearchCondition: ImageSearchCondition,
+		PageSize:             30,
+		PageToken:            pageToken,
+		SearchSessionId:      generateSearchSessionId(DefaultLengthSearchSessionId),
+	}
+
+	res, err := json.Marshal(searchData)
+	if err != nil {
+		return "", err
+	}
+	return string(res), nil
+}
+
+func (a *APIFetcher) SearchByImage(params SearchData) (response ImageSearchResponse, err error) {
+	queryData, err := ImageSearchParse(params)
+	if err != nil {
+		return
+	}
+
+	headers, err := generateHeader(imageSearchParams.URL, imageSearchParams.Method)
+	if err != nil {
+		return
+	}
+
+	var errMsg merror
+	resp, err := a.Client.R().SetHeaders(headers).SetBody(queryData).SetSuccessResult(&response).SetErrorResult(&errMsg).Post(imageSearchParams.URL)
+	if err != nil {
+		return
+	}
+
+	if resp.IsErrorState() {
+		response.Result = "error"
+		err = fmt.Errorf("mercari image search api error: %s", errMsg.Message)
+		return
+	}
+
+	response.Result = "OK"
 	return
 }

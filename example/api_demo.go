@@ -16,12 +16,13 @@ func init() {
 }
 
 func main() {
-	detail()
+	//detail()
 	//related()
-	//search()
+	search()
 	//seller()
 	//similarLooks()
 	//profile()
+	//searchByImage()
 }
 
 func detail() {
@@ -41,7 +42,9 @@ func detail() {
 
 func search() {
 	p := coalmer.SearchData{
-		Keyword: "iPhone 15",
+		Keyword:  "iPhone 15 Max",
+		PriceMax: 50000,
+		PriceMin: 40000,
 	}
 	res, err := apier.Search(p)
 	if err != nil {
@@ -93,4 +96,23 @@ func profile() {
 	}
 	coalmer.Dump(res)
 }
-*/
+
+func searchByImage() {
+	imageUrl := "https://static.mercdn.net/item/detail/orig/photos/m52364170428_1.jpg?1771486963"
+	//page := 0
+
+	p := coalmer.SearchData{
+		ImageUri: imageUrl,
+		PriceMax: 5000,
+		PriceMin: 4000,
+		//		Page:     page,
+	}
+
+	res, err := apier.SearchByImage(p)
+
+	if err != nil {
+		panic(err)
+	}
+	coalmer.Dump(res)
+
+}
