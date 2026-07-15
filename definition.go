@@ -276,38 +276,40 @@ type ItemResultResponse struct {
 
 // Item() response body item part
 type MercariDetail struct {
-	Url                string             `json:"url"`
-	ProductId          string             `json:"id"`
-	ProductName        string             `json:"name"`
-	Price              int                `json:"price"`
-	Seller             ItemSellerInfo     `json:"seller"`
-	Status             string             `json:"status"`
-	Description        string             `json:"description"`
-	Condition          Name_Id_Unit       `json:"item_condition"`
-	Brand              Name_Id_Unit       `json:"item_brand"`
-	Like               int                `json:"num_likes"`
-	Comment            int                `json:"num_comments"`
-	Photos             []string           `json:"photos"`
-	AnonymousShipping  bool               `json:"is_anonymous_shipping"`
-	ShippingDuration   Name_Id_Unit       `json:"shipping_duration"`
-	ShippingFrom       Name_Id_Unit       `json:"shipping_from_area"`
-	ShippingMethod     Name_Id_Unit       `json:"shipping_method"`
-	ShippingPayer      ShippingPayer      `json:"shipping_payer"`
-	ItemSize           Name_Id_Unit       `json:"item_size"`
-	Colors             []Name_Id_Unit     `json:"colors"`
-	ItemCategory       Name_Id_Unit       `json:"item_category"`
-	ItemCategoryNtiers Name_Id_Unit       `json:"item_category_ntiers,omitempty"`
-	ParentCategories   []Name_Id_Unit     `json:"parent_categories_ntiers,omitempty"`
-	Categories         []Name_Id_Unit     `json:"categories"`
-	Created            int64              `json:"created"`
-	Updated            int64              `json:"updated"`
-	UpdatedStr         string             `json:"UpdatedStr"`
-	Related            []RelatedItem      `json:"related"`
-	SimilarLooks       []SimilarItem      `json:"similar_looks,omitempty"`
-	AuctionInfo        AuctionInfo        `json:"auction_info,omitempty"`
-	OfferCoupon        OfferCouponDisplay `json:"offer_coupon_display,omitempty"`
-	IsNoPrice          bool               `json:"is_no_price"`
-	Hashtags           []string           `json:"hash_tags"` //価格がつけられないもの  is no price
+	Url                  string              `json:"url"`
+	ProductId            string              `json:"id"`
+	ProductName          string              `json:"name"`
+	Price                int                 `json:"price"`
+	Seller               ItemSellerInfo      `json:"seller"`
+	Status               string              `json:"status"`
+	Description          string              `json:"description"`
+	Condition            Name_Id_Unit        `json:"item_condition"`
+	Brand                Name_Id_Unit        `json:"item_brand"`
+	Like                 int                 `json:"num_likes"`
+	Comment              int                 `json:"num_comments"`
+	Photos               []string            `json:"photos"`
+	AnonymousShipping    bool                `json:"is_anonymous_shipping"`
+	ShippingDuration     Name_Id_Unit        `json:"shipping_duration"`
+	ShippingFrom         Name_Id_Unit        `json:"shipping_from_area"`
+	ShippingMethod       Name_Id_Unit        `json:"shipping_method"`
+	ShippingPayer        ShippingPayer       `json:"shipping_payer"`
+	ItemSize             Name_Id_Unit        `json:"item_size"`
+	Colors               []Name_Id_Unit      `json:"colors"`
+	ItemCategory         Name_Id_Unit        `json:"item_category"`
+	ItemCategoryNtiers   Name_Id_Unit        `json:"item_category_ntiers,omitempty"`
+	ParentCategories     []Name_Id_Unit      `json:"parent_categories_ntiers,omitempty"`
+	Categories           []Name_Id_Unit      `json:"categories"`
+	Created              int64               `json:"created"`
+	Updated              int64               `json:"updated"`
+	UpdatedStr           string              `json:"UpdatedStr"`
+	Related              []RelatedItem       `json:"related"`
+	SimilarLooks         []SimilarItem       `json:"similar_looks,omitempty"`
+	AuctionInfo          AuctionInfo         `json:"auction_info,omitempty"`
+	OfferCoupon          OfferCouponDisplay  `json:"offer_coupon_display,omitempty"`
+	IsNoPrice            bool                `json:"is_no_price"`
+	Hashtags             []string            `json:"hash_tags"` //価格がつけられないもの  is no price
+	HasAdditionalService bool                `json:"has_additional_service"`
+	AdditionalServices   []AdditionalService `json:"additional_services"`
 }
 
 type ItemSellerInfo struct {
@@ -515,6 +517,12 @@ type ImageSearchResponse struct {
 		Component Component `json:"component"`
 	} `json:"components,omitempty"`
 	//Meta       struct{}    `json:"meta"`
+}
+
+type AdditionalService struct {
+	ServiceCode          string `json:"service_code"`
+	AuthenticationFee    int64  `json:"authentication_fee"`
+	IsFreeAuthentication bool   `json:"is_free_authentication"`
 }
 
 /*

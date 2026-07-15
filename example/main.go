@@ -15,7 +15,7 @@ var (
 func init() {
 	log.Println("start init ~~~ ")
 
-	Coalmer = coalmer.NewCoalmer(coalmer.WithDebug(false))
+	Coalmer = coalmer.NewCoalmer(coalmer.WithDebug(true))
 	//browser := coalmer.LaunchBrowser(true)
 	//Coalmer = coalmer.NewCoalmer(coalmer.WithBrowserMode(), coalmer.WithBrowser(browser))
 	log.Println("init  finish~~~ ")
@@ -29,15 +29,15 @@ func main() {
 	//detail("z7DYa2QbrbC2LwyXV9edZ7")
 	//detail("jkbmuTtmnaKBTScFL42JKJ")
 	//detail("QmLyFEaWCriTHvZjXzsqbA")
-	log.Println("--------------------- index  Finish -----------------------------")
+	//log.Println("--------------------- index  Finish -----------------------------")
 	//search()
-	log.Println("--------------------- search Finish -----------------------------")
-	//detail("m12958444254")
+	//log.Println("--------------------- search Finish -----------------------------")
+	detail("m84926209724")
 	log.Println("--------------------- detail 1 Finish -----------------------------")
-	detail("rsqiACBYgXCWUVfwuLLArE")
-	log.Println("--------------------- detail 2 Finish -----------------------------")
+	//detail("rsqiACBYgXCWUVfwuLLArE")
+	//log.Println("--------------------- detail 2 Finish -----------------------------")
 	//seller()
-	log.Println("--------------------- seller Finish -----------------------------")
+	//log.Println("--------------------- seller Finish -----------------------------")
 	//runtime.Goexit()
 }
 
